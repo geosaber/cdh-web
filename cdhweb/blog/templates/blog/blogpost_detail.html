@@ -1,0 +1,42 @@
+{% extends 'blog/base.html' %}
+{% load mezzanine_tags humanize %}
+{# simple blog post page; adapted in part from mezzanine blog post template #}
+
+{% block page-subtitle %}{{ blogpost.title }} {{ block.super }}{% endblock %}
+
+{% block main %}
+<article typeof="schema:BlogPosting" class="blogpost">
+    <header>
+        <h1 property="schema:headline">{{ blogpost.title }}</h1>
+        <meta property="schema:url" content="{{ blogpost.get_absolute_url }}"/>
+        {# FIXME: do we need full url here? #}
+        <meta property="schema:datePublished" content="{{ blogpost.publish_date|date:"c" }}"/>
+        <meta property="schema:dateModified" content="{{ blogpost.updated|date:"c" }}"/>
+
+        <div class="byline">
+        {% if blogpost.users.exists %}
+        <div class="authors">
+        {% for author in blogpost.users.all %}
+            <span property="schema:author" typeywords
+                <a {% if author.profile %}property="schema:url" href="{{ author.profile.get_absolute_url }}"{% endif %}>
+                <span property="schema:name">{{ author }}</span></a>{% if not forloop.last %}, {% endif %}
+            </span>
+        {% endfor %}
+        </div>
+        {% endif %}
+        <span class="date-published">{{ blogpost.publish_date|date:"F j, Y" }}</span>
+        {# NOTE: google structured data testing tool claims publisher & image are required #}
+        </div>
+    </header>
+
+    <div class="content" property="schema:articleBody">
+    {{ blogpost.content|richtext_filters|safe }}
+    </div>
+
+    {% if blogpost.keywords.exists %}
+    <div class="keywords">Keywords: {{ blogpost.keywords.all|join:', ' }}</div>
+    {% endif %}
+
+</article>
+
+{% endblock %}

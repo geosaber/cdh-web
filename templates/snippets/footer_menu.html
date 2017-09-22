@@ -1,0 +1,20 @@
+{% load pages_tags i18n %}
+{# display full top-level and secondary navigation in the footer #}
+{# adapted from mezzanine pages/menus/primary.html template #}
+<ul>
+{% for page in page_branch %}
+    {% if page.in_menu %}
+        <li class='menu-header'>
+            {# set page_branch for submenu if there is one #}
+            {% if page.has_children_in_menu %}
+            <a class="toggle">+</a> {# toggle for mobile menu #}
+            {% endif %}
+            <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
+            {% if page.has_children_in_menu %}
+            <ul class="submenu">
+                {% page_menu page "snippets/footer_secondary_nav.html" %}
+            </ul>
+            {% endif %}
+    {% endif %}
+{% endfor %}
+</ul>

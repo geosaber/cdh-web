@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %} {# add a class to main content for home-page specific styles #}
+<div class="homepage">
+{{ block.super }}
+</div>
+{% endblock %}
+
+{% block bodyattrs %}class="with-cards"{% endblock %}
+
+{% block main %}
+
+<section class="events">
+<h2><a href="{% url 'event:upcoming' %}">Upcoming Events</a></h2>
+{% for event in events %}
+    {% include 'events/snippets/event_card.html' %}
+{% endfor %}
+</section>
+
+<section class="projects">
+<h2><a href="{% url 'project:list' %}">Projects</a></h2>
+{% for project in projects %}
+    {% include 'projects/snippets/project_card.html' %}
+    {# project tile still todo #}
+{% endfor %}
+</section>
+
+
+{% endblock %}

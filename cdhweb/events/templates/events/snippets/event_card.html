@@ -1,0 +1,35 @@
+{# display a single event in card format #}
+{# FIXME: significant overlap with event_detail, esp. for schema properties #}
+<div class="card event" typeof="schema:Event"
+{% if event.image %}style="background-image:url('{{ MEDIA_URL }}{{ event.image }}')"{% endif %}>
+    <a property="schema:url" href="{{ event.get_absolute_url }}">
+    <div class="event-type">{{ event.event_type }}</div>
+    <div class="content">
+        <h2 property="schema:name">{{ event.title }}</h2>
+
+        <div class="presenter">
+            {% for person in event.speakers.all %}
+            <div property="schema:performer" typeof="schema:Person">
+                <span property="schema:name">{{ person.profile.title }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <meta property="schema:startDate" content="{{ event.start_time|date:'c' }}"/>
+        <meta property="schema:endDate" content="{{ event.end_time|date:'c' }}"/>
+        {# location is required for schema.org #}
+        <div property="schema:location" typeof="schema:Place">
+            <meta property="schema:name" content="{{ event.location.name }}"/>
+            <meta property="schema:address" content="{{ event.location.address}}"/>
+        </div>
+        {# description is recommended for schema.org #}
+        <div style="display:none" property="schema:description">{{ event.content|safe }}</div>
+
+
+        <div class="when">
+            <span class="day">{{ event.start_time|date:"F j" }}</span>
+            <span class="time">{{ event.start_time|date:"g:i" }}-{{ event.end_time|date:"g:i A" }}</span>
+        </div>
+    </div>
+</a>
+</div>

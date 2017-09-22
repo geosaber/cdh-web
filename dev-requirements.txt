@@ -1,5 +1,6 @@
 pytest
 pytest-django
 pytest-cov
-# optional but pretty
+# sugar is optional but pretty
 pytest-sugar
+django-debug-toolbar

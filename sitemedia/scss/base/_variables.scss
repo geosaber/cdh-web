@@ -1,0 +1,57 @@
+// Font stacks
+$font-stack-headline: BrownStdRegular, arial, sans-serif;
+$font-stack-headline-bold: BrownStdBold, bold arial, sans-serif;
+$font-stack-body-text: 'Lyon Text Web', Georgia, serif;
+
+// Typography
+$base-font-family: $font-stack-body-text;
+$heading-font-family: $font-stack-headline;
+
+// Line height
+$base-line-height: 1.5;
+$heading-line-height: 1.2;
+
+// Other Sizes
+$base-border-radius: 3px;
+$base-spacing: 1.5em;
+$small-spacing: $base-spacing / 2;
+$base-z-index: 0;
+
+// Colors
+$cdh-blue: #00edff;
+$dark-cdh-blue: shade($cdh-blue, 75%);
+$light-cdh-blue: tint($cdh-blue, 85%);
+$light-grey: #f8f8f8;  // formerly bg-gray
+$dark-grey: #646464;   // formerly text-gray
+$offwhite: #f9f9f9;
+$black: #000000;
+// NOTE: #d8d8d8 is also in use; create a variable? useful to distinguish/name?
+
+// local items
+$header-nav-height: 90px;
+
+$small-max-width: 735px;
+
+// bitters built-ins
+
+// Font Colors
+$base-font-color: $black;
+$action-color: $cdh-blue;
+
+// Border
+$base-border-color: $light-grey;
+$base-border: 1px solid $base-border-color;
+
+// Background Colors
+$base-background-color: #fff;
+$secondary-background-color: tint($base-border-color, 75%);
+
+// Focus
+$focus-outline-color: transparentize($action-color, 0.4);
+$focus-outline-width: 3px;
+$focus-outline: $focus-outline-width solid $focus-outline-color;
+$focus-outline-offset: 2px;
+
+// Animations
+$base-duration: 150ms;
+$base-timing: ease;

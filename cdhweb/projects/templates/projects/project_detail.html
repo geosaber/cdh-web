@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load mezzanine_tags %}
+
+{% block page-subtitle %}{{ project.title }} | Projects | {% endblock %}
+
+{% block main %}
+<div class="project-detail">
+<header>
+    <h1>{{ project.title }}</h1>
+    <h2>{{ project.short_description }}</h2>
+    {% if project.excerpt %}
+    <p class="short_description">{{ project.excerpt }}</p>
+    {% endif %}
+</header>
+
+<div class="contributors">
+    <ul>
+        {# TODO: display current *or* latest grant #}
+    {% for membership in project.current_membership %}
+        {% ifchanged %}<li class="role"><h3>{{ membership.role }}</h3></li>{% endifchanged %}
+        <li>{{ membership.user }}</li>
+    {% endfor %}
+    {# include project alumni  #}
+    {% if project.alumni_members %}
+        <li class="role"><h3>Project Alum{{ project.alumni_members|pluralize }}</h3></li>
+        {% for alum in project.alumni_members %}
+        <li>{{ alum }}</li>
+        {% endfor %}
+    {% endif %}
+    </ul>
+
+    <ul class="links">
+    {% for link in project.projectresource_set.all %}
+        {% with link_type=link.resource_type.name %}
+        <li><a href="{{ link.url }}">{% if link_type == 'website' %}Project Website{% elif link_typee == 'github' %}GitHub{% else %}{{ link_type|title }}{% endif %}</a></li>
+        {% endwith %}
+    {% endfor %}
+    </ul>
+
+
+</div>
+
+<div class="description">
+    {% if project.image %}
+    <img src="{{ MEDIA_URL }}{{ project.image }}"/>
+    {% endif %}
+    {{ project.long_description|safe }}
+</div>
+
+{% endblock %}

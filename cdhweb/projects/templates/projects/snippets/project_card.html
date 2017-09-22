@@ -1,0 +1,9 @@
+<div class="card project {% if large %}project-large{% endif %}"
+{% if project.thumb %}style="background-image:url('{{ MEDIA_URL }}{{ project.thumb }}')"{% endif %}>
+    <a href="{{ project.get_absolute_url }}">
+    <div class="content">
+        <h2>{{ project.title }}</h2>
+        <p>{{ project.short_description }}</p>
+    </div>
+    </a>
+</div>

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block page-subtitle %}{{ event.title }} | Events | {% endblock %}
+
+{% block main %}
+<div typeof="schema:Event" class="event-detail">
+
+<header>
+    <h1 property="schema:name">{{ event.title }}</h1>
+    {% if event.excerpt %}
+    <p class="short_description">{{ event.excerpt }}</p>
+    {% endif %}
+</header>
+
+<div class="details">
+    <ul>
+    {% for person in event.speakers.all %}
+    {# performer == presenter #}
+    <li property="schema:performer" typeof="schema:Person">
+        <h3><a property="schema:name"
+            {% if person.published %}href="{{ person.get_absolute_url }}"{% endif %}>
+            {{ person.profile.title }}</a></h3>
+    </li>
+    {# todo: affiliation?  #}
+    {% endfor %}
+    </ul>
+    <p>{{ event.event_type }}</p>
+    <meta property="schema:startDate" content="{{ event.start_time|date:'c' }}"/>
+    <meta property="schema:endDate" content="{{ event.end_time|date:'c' }}"/>
+    <div>{{ event.when }}</div>
+
+    <div property="schema:location" typeof="schema:Place" class="location">
+        <span property="schema:name">{{ event.location.name }}</span>
+        <div property="schema:address">{{ event.location.address}}</div>
+    </div>
+
+    <a href="{{ event.get_ical_url}}" class="ical">Export to iCal</a>
+</div>
+
+<img property="schema:image" src="{{ MEDIA_URL }}{{ event.image }}"/>
+
+<div class="description">
+    <meta property="schema:url" content="{{ event.full_url }}"/>
+
+    <div property="schema:description">{{ event.content|safe }}</div>
+</div>
+</div>
+
+{% endblock %}
+
+
+
+

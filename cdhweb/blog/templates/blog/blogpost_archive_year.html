@@ -1,0 +1,32 @@
+{% extends 'blog/base.html' %}
+{% load humanize %}
+
+{% block page-subtitle %}{{ blogpost.title }} | Updates | {% endblock %}
+
+
+
+{% block main %}
+<h3>Archives</h3>
+
+<ul>
+    {% for date in date_list %}
+        <li>{{ date|date:"M" }}</li>
+    {% endfor %}
+</ul>
+
+<ul>
+    <h1>All posts for {{ year|date:"Y" }}</h1>
+    {% for blogpost in object_list %}
+    <li>
+        <a href="{{ blogpost.get_absolute_url }}">{{ blogpost.title }}</a>
+        {% for author in blogpost.users.all %}
+        <div property="schema:author" typeof="schema:Person">
+            <a property="schema:url" href="{{ author.profile.get_absolute_url }}">
+            <span property="schema:name">{{ author.get_full_name|default:author.username }}</span></a>
+        </div>
+        {% endfor %}
+        <div>{{ blogpost.publish_date|naturalday }}</div>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

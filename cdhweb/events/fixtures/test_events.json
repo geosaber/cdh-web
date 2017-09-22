@@ -1,0 +1,108 @@
+[
+{
+    "model": "sites.site",
+    "fields": {
+        "domain": "localhost:8000",
+        "name": "localhost"
+    }
+},
+{
+    "model": "events.event",
+    "pk": 34,
+    "fields": {
+        "keywords_string": "",
+        "site": [
+            "localhost:8000"
+        ],
+        "title": "How to Command Line",
+        "slug": "workshop-how-to-command-line",
+        "_meta_title": null,
+        "description": "How to Command Line - Oct 04, 2017",
+        "gen_description": true,
+        "created": "2017-08-29T19:43:22Z",
+        "updated": "2017-09-15T10:26:31.975Z",
+        "status": 2,
+        "publish_date": "2017-08-29T19:43:22Z",
+        "expiry_date": null,
+        "short_url": null,
+        "in_sitemap": true,
+        "content": "",
+        "sponsor": null,
+        "start_time": "2017-10-04T20:30:00Z",
+        "end_time": "2017-10-04T22:00:00Z",
+        "location": 1,
+        "event_type": [
+            "Workshop"
+        ],
+        "image": "",
+        "thumb": "",
+        "speakers": []
+    }
+},
+{
+    "model": "events.event",
+    "pk": 13,
+    "fields": {
+        "keywords_string": "",
+        "site": [
+            "localhost:8000"
+        ],
+        "title": "Pitching a DH Project",
+        "slug": "workshop-pitching-a-dh-project-1",
+        "_meta_title": "",
+        "description": "Do you have a research idea or a collection of sources that would make a great digital humanities project? Do you want to build a digital tool that will foster humanistic inquiry? This workshop will cover the basics of what it takes to design and implement a DH project, and how to successfully pitch your project idea for a CDH grant.",
+        "gen_description": true,
+        "created": "2016-11-07T12:34:25Z",
+        "updated": "2017-09-15T10:26:31.903Z",
+        "status": 2,
+        "publish_date": "2016-11-07T12:34:25Z",
+        "expiry_date": null,
+        "short_url": "",
+        "in_sitemap": true,
+        "content": "<p>Do you have a research idea or a collection of sources that would make a great digital humanities project? Do you want to build a digital tool that will foster humanistic inquiry? This workshop will cover the basics of what it takes to design and implement a DH project, and how to successfully pitch your project idea for a CDH grant.</p>\n<p>We will discuss best practices for: formulating a DH research question, establishing project goals, choosing appropriate tools and resources, building a project team, creating a work plan, budgeting, and project management.</p>\n<p>Members of the Princeton community with DH projects at any stage of development are welcome to attend. The workshop has been designed to assist those applying for the CDH project grant, and we will answer specific questions about the Project Prospectus and discuss expectations and responsibilities for the grant period.</p>\n<p>About the instructor: Natalia Ermolaev is Asssitant Director at the CDH. She has a background in Russian literature, periodical studies, and Library and Information Science.</p>\n<p>Files: <a href=\"https://digitalhumanities.princeton.edu/static/media/uploads/2016-2017_pitching_a_dh_project_resources.pdf\">Pitching a DH Project Resources 2016-2017 (PDF)</a>, <a href=\"/static/media/uploads/cdh_grad_student_pm_job_description_2.pdf\">CDH Project Manager Job Description (PDF),</a> <a href=\"/static/media/uploads/2016-2017_pitching_a_dh_project.pdf\">Slides (PDF).</a></p>",
+        "sponsor": null,
+        "start_time": "2017-01-09T17:00:00Z",
+        "end_time": "2017-01-09T06:30:00Z",
+        "location": 1,
+        "event_type": [
+            "Workshop"
+        ],
+        "image": "",
+        "thumb": "",
+        "speakers": []
+    }
+},
+{
+    "model": "events.event",
+    "pk": 1,
+    "fields": {
+        "keywords_string": "",
+        "site": [
+            "localhost:8000"
+        ],
+        "title": "Fall Open House",
+        "slug": "fall-open-house",
+        "_meta_title": "",
+        "description": "\nWelcome back! Join us to catch up with old and new friends in the Princeton digital humanities community. Meet the center\u2019s staff and our new postdoctoral and graduate fellows, and learn more about our new research projects, and check out our shiny new space on B Floor in Firestone Library. We are looking forward to seeing you!",
+        "gen_description": true,
+        "created": "2016-09-21T12:53:49Z",
+        "updated": "2017-09-15T10:26:31.858Z",
+        "status": 2,
+        "publish_date": "2016-09-21T12:53:49Z",
+        "expiry_date": null,
+        "short_url": "",
+        "in_sitemap": true,
+        "content": "<div class=\"tribe-events-single-event-description tribe-events-content entry-content description\">\n<p>Welcome back! Join us to catch up with old and new friends in the Princeton digital humanities community. Meet the center\u2019s staff and our new postdoctoral and graduate fellows, and learn more about our new research projects, and check out our shiny new space on B Floor in Firestone Library. We are looking forward to seeing you!</p>\n<p>Light refreshments will be served.</p>\n<p></p>\n</div>",
+        "sponsor": null,
+        "start_time": "2016-09-26T20:30:00Z",
+        "end_time": "2016-09-26T22:00:00Z",
+        "location": 1,
+        "event_type": [
+            "Reception"
+        ],
+        "image": "",
+        "thumb": "",
+        "speakers": []
+    }
+}
+]

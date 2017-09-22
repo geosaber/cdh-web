@@ -1,390 +1,146 @@
-<html>
-{% load pages_tags mezzanine_tags i18n staticfiles keyword_tags disqus_tags %}
+{% load static pages_tags mezzanine_tags %}
+<!DOCTYPE html>
+<html lang='en' xmlns:schema="http://schema.org/">
+
 <head>
-    <meta charset='UTF-8'>
-    <meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
-    <meta name="description" content="{% block meta_description %}{% endblock %}">
+    <meta charset='UTF-8'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>{% block page-subtitle %}{% if page %}{{ page.meta_title|add:" | "}}{% endif %}{% endblock %}CDH @ Princeton</title>
+    <meta name="keywords" content="{% block meta_keywords %}{{ page.keywords.all|join:', ' }}{% endblock %}"/>
+    <meta name="description" content="{% block meta_description %}{{ page.description }}{% endblock %}"/>
+    {% block extra-head %}{% endblock %}
 
-    <title>CDH @ Princeton  {{ page.title }}</title>
-    <link rel="shortcut icon" href="/favicon.ico">
     {% compress css %}
-    <link rel='stylesheet' type='text/css' href='{% static "css/bootstrap.css" %}'>
-    <link rel='stylesheet' type='text/css' href='{% static "css/non-responsive-overrides.css" %}'>
-    <link rel='stylesheet' type='text/css' href='{% static "css/1609-SCGHHO.css" %}'>
+    <link type="text/x-scss" rel="stylesheet" href="{% static 'scss/site.scss' %}" charset="utf-8"/>
+    {# <link rel='stylesheet' type='text/css' href='{% static "css/base-prefixed.css" %}'> #}
     {% endcompress %}
-
-    {% compress js %}
-	<script
-		  src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
-
-      <script src='{% static "js/bootstrap.min.js" %}'></script>
-
 
     <script src="https://use.fontawesome.com/46070f4452.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"></script>
+    <script src="{% static 'js/local.js' %}"></script>
 
     <script>
+        var scroll = 0;
+        /*
+        	Check every time the window scrolls. If it's by 25px or more and
+          the scroll is below 90px, hide the navi. If the scroll down isn't
+          those, leave it as is.
+          If the scroll is up by 5 px, bring the menu back.
+        */
+        $(window).scroll(function()
+        {
+            scrolled = $(document).scrollTop();
+            if (scrolled - scroll > 25 && scrolled > scroll && scrolled >
+                90)
+            {
+                $('header').addClass('hidden');
+            }
+            else if (scrolled > scroll)
+            {
+                // Do nothing since the scroll was either
+                // too high or not 'enough'
+            }
+            else if (scrolled < scroll && scroll - scrolled > 5)
+            {
+                $('header').removeClass('hidden');
+            }
 
-    $(function () {
-        $('[data-toggle="popover"]').popover()
+            scroll = scrolled;
 
-    })
-
-    $(document).ready(function() {
-        $('.obfuscate').each(function() {
-        this.innerHTML = this.innerHTML.replace('(at)', '@').replace(/\(dot\)/g, '.');
         });
+
+        $(document).ready(function() {
+            $('.menu-toggle').on('click', function(e){
+                e.preventDefault();
+                console.log("click");
+                $('#mainmenu').toggle();
+            });
+            $('a.toggle').on('click', function(e){
+                $(this).parent().toggleClass('open');
+                $(this).parent().find('.submenu').toggle();
+            });
+
     });
-
     </script>
-	<script>
-	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-	  ga('create', 'UA-87887700-1', 'auto');
-	  ga('send', 'pageview');
-
-	</script>	    
-
-
-    {% endcompress %}
-
-    <style>
-	@media print {
-	  a[href]:after {
-	    content: none !important;
-	  }
-	}
-
-        body {overflow-x: hidden; padding-right: 0px;}
-
-        @font-face {
-            font-family: 'Brown Std Bold';
-            src: url('{% static "fonts/Brown-Bold.otf" %}') format('opentype');
-
-            }
-
-        @font-face {
-            font-family: 'Brown Std Regular';
-            src: url('{% static "fonts/BrownStd-Regular.otf" %}') format('opentype');
-            }
-
-        .navbar-brand {
-            width: 80px !important;
-            height: 60px !important;
-        		position: absolute;
-   					top: 0px;
-						left: 25px;
-        }
-
-
-		.col-xs {
-			width: 60px;
-		}
-
-		.image-box {
-		width: 235px;
-		height: 176px;
-        display: inline-block;
-        margin-right: 20px;
-        margin-bottom: 20px;
-        overflow: hidden;
-        clip-path: url('#clipImage');
-
-
-		}
-
-        .image-box:hover > .title-box {
-             transition: opacity .25s ease-in-out;
-   -moz-transition: opacity .25s ease-in-out;
-   -webkit-transition: opacity .25s ease-in-out;
-            opacity: 0;
-        }
-
-
-        .image-box:hover > .title-text {
-             transition: opacity .25s ease-in-out;
-   -moz-transition: opacity .25s ease-in-out;
-   -webkit-transition: opacity .25s ease-in-out;
-            opacity: 0;
-        }
-
-		.main-image {
-			/*Chrome,Safari*/
-			-webkit-clip-path: polygon(185px 0px, 235px 50px, 235px 176px, 50px 176px, 0px 126px, 0px 0px);
-			/*Firefox*/
-			clip-path: url('#clipImage');
-			overflow: hidden;
-            position: absolute;
-            max-height: 500px;
-            width: auto;
-		}
-
-
-		.title-box {
-			width: 185px;
-			height: 126px;
-			background: white;
-			z-index: 10;
-			position: absolute;
-            opacity: 1;
-            padding-left: 0px;
-            overflow: hidden;
-            transition: opacity .25s ease-in-out;
-   -moz-transition: opacity .25s ease-in-out;
-   -webkit-transition: opacity .25s ease-in-out;
-        }
-
-
-
-		.title-text {
-			padding: 0.25em;
-			font-family: 'Brown Std Bold';
-			font-size: 18px;
-            opacity: 1;
-            transition: opacity .25s ease-in-out;
-   -moz-transition: opacity .25s ease-in-out;
-   -webkit-transition: opacity .25s ease-in-out;
-		}
-
-
-        .navbar {
-            height: 70px;
-            background-color: white;
-            color: black !important;
-            border: none !important;
-        }
-
-        .navbar-collapse {
-            font-family: 'Brown Std Bold';
-        }
-
-        .navbar-nav {
-            width: 1040px;
-            margin: auto;
-            display: inline-block;
-            text-align: justify !important;
-        		padding: 0px 0px 0px 0px;
-				}
-
-        .navbar-nav li {
-            float: none !important;
-            display: inline-block !important;
-            font-size: 15px !important;
-            margin-right: 27px;
-
-
-        }
-
-
-
-        #unhover:hover {
-                    background-color: none !important;
-        }
-
-
-        #searchbar {
-            position: absolute;
-            top: 0;
-            right: -178px;
-           z-index: 9999;
-
-            transition-duration: 0.5s;
-        }
-
-        #searchbar:hover {
-            right: 0;
-            transition-duration: 0.5s;
-        }
-
-        .sidebar {
-						font-size: 15px;
-						font-family: 'Brown Std Bold';
-						position: fixed;
-
-
-				}
-
-        .sidebar a, a:visited {
-						color: black;
-
-				}
-
-        .sidebar a:hover {
-						text-decoration: none;
-						background-color: cyan;
-				}
-
-        .text-frame {
-            width: 232px;
-            height: 176px;
-            border: 3px solid #646464;
-            display: inline-block;
-            position: relative;
-            z-index: 9;
-            margin-right: 20px;
-            margin-bottom: 10px;
-        }
-
-
-
-        .unstyled-link {
-            color: black;
-            text-decoration: none;
-        }
-
-        .unstyled-link:hover {
-            color: black !important;
-            text-decoration: none;
-            background-color: #00EDFF !important;
-        }
-
-        #noeffect:hover {
-            color: black !important;
-            background-color: none !important;
-            text-decoration: none !important;
-        }
-
-        #twittertag, #facebooktag {
-            color: black;
-            font-size: 20px;
-        }
-
-        #twittertag:hover, #facebooktag:hover {
-            color: #00EDFF;
-            font-size: 20px;
-        }
-        .obfuscate {
-            /* Selector for jQuery to obscure emails from crawlers */
-        }
-
-
-        {% block extra_css %}{% endblock %}
-
-    </style>
-
-  </head>
-
-    <!--override to fix ye olde navbarre-->
-    <body style='padding-top: 70px;'>
-
-<!--svgs-->
-        <svg width='0' height='0'>
-  <clipPath id='clipImage'>
-    <polygon points='185 0,235 50,235 176,50 176,0 126,0 0'>
-    </polygon>
-  </clipPath>
-</svg>
-
-
-
-
-
-
-
-    <!--div for overall box-->
-
-
-            <nav class='navbar navbar-default navbar-fixed-top' style='min-width: 1200px!important; width: 100%;'>
-            <!--nav header-->
-
-                <!--end header-->
-
-
-            <!--div for inner 1000px container-->
-            <div class='container' style='width: 1040px; height: 70px; padding-left: 0px;'>
-
-
-                <div id='navbar' class='navbar-collapse collapse'>
-
-                    <ul class='nav navbar-nav'>
-                        <li><a href='/'><img src='{% static "img/CDH_logo_01.svg" %}'
-                                                                     style='width: 80px; height: 60px;'/></span></a></li>
-				        <li><a href='/about/' ><span class='unstyled-link'>About</span></a></li>
-                        <li><a href='/research/'><span class='unstyled-link'>Research</span></a></li>
-                        <li><a href='/community/'><span class='unstyled-link'>Community</span></a></li>
-                        <li><a href='/resources/'><span class='unstyled-link'>Resources</span></a></li>
-                        <li><a href='/grants/'><span class='unstyled-link'>Grants</span></a></li>
-                        <li><a href='/events/'><span class='unstyled-link'>Events</span></a></li>
-                        <li><a href='/blog/'><span class='unstyled-link'>Blog</span></a></li>
-                        {% search_form %}
-                            </ul>
-
-                            </div>
-                                  </li>
-                    </ul>
-                </div>
-
-            <!--end inner container-->
-
-
-                </form>
-
-            </nav>
-
-
-
-
-
-
-
-
-        <!--create content div-->
-    <div class='container' style='width: 1040px; height: 100%;'>
-
-
-    <!--page content spacer-->
-
-
-    {% block maincontent %}{% endblock %}
-
-        <div class='row' style='width: 100%; padding: 0px; margin: auto;'>
-            <div class='col-xs-3' style='background-color: whitesmoke; height: 200px;'>&nbsp;</div>
-            <div class='col-xs-3' style='font-family: "Brown Std Regular"; font-size: 15px; color: black; background-color: whitesmoke; height: 200px;'>
-                <ul class='list-unstyled' style='padding-top: 50px;'>
-                    <li>Center for Digital Humanities</li>
-                    <li>Firestone Library, Floor B</li>
-                    <li>Princeton University</li>
-                    <li>Princeton, NJ 08544</li>
-                </ul>
-                <br />
-                <span style='font-size: 12px;'>©2016 Trustees of Princeton University</span>
-            </div>
-            <div class='col-xs-3' style='font-family: "Brown Std Bold"; font-size: 15px; background-color: whitesmoke; height: 200px;'>
-                <ul class='list-unstyled' style='padding-top: 50px;'>
-                    <li><a href='/contact/' class='unstyled-link'>Contact and Directions</a></li>
-                    <li><br /></li>
-                    <li><a href='/comingsoon/' class='unstyled-link'>FAQs</a></li>
-                </ul>
-
-            </div>
-
-            <div class='col-xs-3' style='font-family: "Brown Std Bold"; font-size: 15px; background-color: whitesmoke; height: 200px;'>
-                <ul class='list-unstyled' style='padding-top: 50px;'>
-                    <li><a href='/subscribe/' class='unstyled-link'>Subscribe</a></li>
-                    <li><br /></li>
-                    <li><a href='https://www.facebook.com/princetoncdh/' target='_blank'>
-                        <span class='fa fa-facebook-square'
-                              aria-hidden='true'
-                              id='facebooktag'></span></a>
-                        <a href='https://twitter.com/PrincetonDH' target='_blank'>
-                        <span class='fa fa-twitter'
-                              style='padding-left: 24px;'
-                              id='twittertag'></span></a></li>
-                </ul>
-
-                </div>
-
-            </div>
-
+</head>
+
+<body {% block bodyattrs %}{% endblock %}>
+    <a href='#mainmenu' aria-label='Main Menu'></a>
+    <a href='#maincontent' aria-label='Main Content'></a>
+    <a href='#footermenu' aria-label='Footer Menu'></a>
+    <header class="nav">
+        <nav class='mobile-nav'>
+            <a class="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a>
+        </nav>
+        <nav id='mainmenu'>
+            <a href='{% url 'home' %}' class='home-page'>
+              <img
+              alt='CDH Logo'
+              src='{% static "img/CDH_logo.svg" %}' />
+            </a>
+            {% page_menu "snippets/primary_navigation.html" %}
+        </nav>
+    </header>
+    {% include 'snippets/test_banner.html' %}
+
+  </div>
+</div>
+    {% block content %}
+        {% block content-header %}
+        {% endblock %}
+    <div id='maincontent'>
+        {% block main %}{% endblock %}
     </div>
 
+    {% if page.attachments.exists %}
+        {% include 'snippets/attachments.html' with attachments=page.attachments.all %}
+    {% endif %}
+
+        {% block content-footer %}
+        {% endblock %}
+    {% endblock content %}
+
+    <footer id='footermenu'>
+        <section>
+            {% page_menu "snippets/footer_menu.html" %}
+
+        </section>
+
+        <section class="contact">
+
+        {# RDFa markup for organization and address #}
+        <p class='contact-info' typeof="schema:Organization">
+           {# TODO: pass in site url <a href="" property="url"> #}
+            <span property="schema:name">Center for Digital Humanities</span><br />
+            <span property="schema:address" typeof="schema:PostalAddress">
+            <span property="schema:streetAddress">Firestone Library Floor B<br />
+            Princeton University</span><br />
+            <span property="schema:addressLocality">Princeton</span>, <span property="schema:addressRegion">NJ</span> <span property="schema:postalCode">08544</span><br />
+            </span>
+            <br />
+            ©2015 Trustees of Princeton University
+        </p>
+
+            {# social links #}
+            <div class="social">
+                <ul>
+                <li><a href='https://www.facebook.com/princetoncdh/'><span class='fa fa-facebook-square'
+                    aria-label='CDH Facebook Link'></span></a>
+                    <a href='https://twitter.com/PrincetonDH'><span class='fa fa-twitter'
+                     aria-label='CDH Twitter Link'></span></a>
+                </li>
+                </ul>
+                <div class="sw-version">v. {{ SW_VERSION }}</div>
+            </div>
+        </section>
 
 
+    </footer>
 
 
-
-  </body>
+</body>
 
 </html>

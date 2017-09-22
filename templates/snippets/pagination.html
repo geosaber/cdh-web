@@ -1,0 +1,16 @@
+<div class="pagination">
+    <nav>
+        {% if page_obj.has_previous %}
+          <a rel="prev" href="?page={{ page_obj.previous_page_number }}">←</a>
+        {% endif %}
+
+        {# just display all pages for now, no ellipses #}
+        {% for number in page_obj.paginator.page_range %}
+            <a href='?page={{ number }}'  {% if number == page_obj.number %}class="current"{% endif %}>{{ number }}</a>
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+          <a rel="next" href="?page={{ page_obj.next_page_number }}">→</a>
+        {% endif %}
+    </nav>
+</div>

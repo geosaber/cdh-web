@@ -1,0 +1,13 @@
+{# attachment cards; expects a list/queryset of attachments #}
+<div class="attachments">
+{% for attachment in attachments %}
+<div class="attachment card {{ attachment.attachment_type|lower }}">
+    <a href="{% if attachment.file %}{{ MEDIA_URL }}{{ attachment.file }}{% else %}{{ attachment.url }}{% endif %}">
+        <h2>{{ attachment.title }}</h2>
+        {% if attachment.author %}
+        <div class="author">{{ attachment.author }}</div>
+        {% endif %}
+    </a>
+</div>
+{% endfor %}
+</div>

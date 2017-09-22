@@ -1,0 +1,118 @@
+html {
+  color: $base-font-color;
+  font-family: $base-font-family;
+  font-size: 100%;
+  line-height: $base-line-height;
+
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $heading-font-family;
+  font-size: modular-scale(1);
+  line-height: $heading-line-height;
+  margin: 0 0 $small-spacing;
+}
+h2 {
+  font-size: modular-scale(-1);
+}
+
+p {
+  margin: 0 0 $small-spacing;
+}
+
+#maincontent p a {
+  color: black;
+  text-decoration: none;
+  text-decoration-skip: ink;
+  transition: color $base-duration $base-timing;
+  /* use background to do a colored underline */
+  background-image: linear-gradient(to right, $cdh-blue 100%, transparent 0%);
+  background-position: 0 0.85em;
+  background-repeat: repeat-x;
+  background-size: 8px 2px;
+
+  &:hover {
+    background-color: $light-cdh-blue;
+  }
+
+  &:focus {
+    outline: $focus-outline;
+    outline-offset: $focus-outline-offset;
+    background-color: white;
+    background-image: none;
+  }
+}
+
+body {
+  background-color: white;
+  font-family: $font-stack-body-text;
+  font-size: 20px;
+  color: #000000;
+  line-height: 1.6;
+
+  &.with-cards {
+      background-color: $light-grey;
+  }
+
+  @media (max-width: $small-max-width) {
+    font-size: 16px;
+  }
+
+}
+
+h1, h2, h3, h4 {
+  font-family: $font-stack-headline-bold;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 28px;
+  line-height: 1.29;
+}
+
+h4 {
+  font-size: 20px;
+  font-stretch: normal;
+}
+
+/* NOTE: labeled as .quote in zeplin, used for blog excerpt/call out in design */
+q {
+  font-family: Georgia;
+  font-size: 21px;
+  font-style: italic;
+  line-height: 1.52;
+  color: $dark-grey;
+}
+
+/* Caption in zeplin */
+figcaption {
+  font-family: $font-stack-body-text; /* redundant? body font */
+  font-size: 18px;
+  font-style: italic;
+  line-height: 1.33;
+  text-align: center;
+  color: $dark-grey;
+}
+
+
+
+hr {
+  border-bottom: $base-border;
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
+  margin: $base-spacing 0;
+}
+
+blockquote {
+    color: $dark-grey;
+    font-style: italic;
+    line-height: 1.52;
+    border-left: solid 3px #979797;
+    padding-left: 30px;
+}

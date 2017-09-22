@@ -1,0 +1,197 @@
+[
+{
+    "model": "staffprofiles.staffer",
+    "pk": 1,
+    "fields": {
+        "name": "Claus the Chicken",
+        "photo": "ClausTheChicken.png",
+        "profile_photo": "uploads/claus-1.jpg",
+        "title": "Mascot and Publicity fiend",
+        "full_title": "",
+        "email": "claus@chickenmail.org",
+        "education": "B.A. Agriculture",
+        "sortorder": 1
+    }
+},
+{
+    "model": "staffprofiles.stafferpage",
+    "pk": 1,
+    "fields": {
+        "keywords_string": "",
+        "site": 1,
+        "title": "Claus the Chicken",
+        "slug": "claus-the-chicken",
+        "_meta_title": "",
+        "description": "Specializations: legos, deploys, photobombing",
+        "gen_description": false,
+        "created": "2016-09-22T20:08:37Z",
+        "updated": "2016-10-23T16:20:09Z",
+        "status": 2,
+        "publish_date": "2016-09-22T20:08:37Z",
+        "expiry_date": null,
+        "short_url": "",
+        "in_sitemap": true,
+        "staffer_data": 1,
+        "extra_content": "<p><span>Specializations: legos, deploys, photobombing</span></p>\n<p>Claus sits with the legos in CDH.</p>"
+    }
+},
+{
+    "model": "eventspages.event",
+    "pk": 31,
+    "fields": {
+        "event_title": "Fall Open House",
+        "event_description": "<p>Welcome back! Join us to catch up with old and new friends in the Princeton digital humanities community. Meet the center\u2019s staff and our new postdoctoral and graduate fellows, and learn more about our new research projects, and check out our shiny new space on B Floor in Firestone Library. We are looking forward to seeing you! Light refreshments will be served.</p>",
+        "event_sponsor": "",
+        "event_image": "",
+        "event_location": "B Floor, Firestone Library",
+        "event_start_time": "2017-09-25T20:30:00Z",
+        "event_end_time": "2017-09-25T22:00:00Z"
+    }
+},
+{
+    "model": "eventspages.eventpage",
+    "pk": 31,
+    "fields": {
+        "keywords_string": "",
+        "site": 1,
+        "title": "Fall Open House",
+        "slug": "fall-open-house",
+        "_meta_title": null,
+        "description": "Fall Open House",
+        "gen_description": true,
+        "created": "2017-07-17T17:59:58Z",
+        "updated": "2017-07-17T17:59:58Z",
+        "status": 2,
+        "publish_date": "2017-07-17T17:58:12Z",
+        "expiry_date": null,
+        "short_url": null,
+        "in_sitemap": true,
+        "event_data": 31,
+        "extra_info": ""
+    }
+},
+{
+    "model": "blog.blogpost",
+    "pk": 23,
+    "fields": {
+        "comments_count": 0,
+        "keywords_string": "DH2017 meetup projectmanagement projectdesign community storify",
+        "rating_count": 0,
+        "rating_sum": 0,
+        "rating_average": 0.0,
+        "site": 1,
+        "title": "So Long, and Thanks for All the Muffins",
+        "slug": "so-long-and-thanks-for-all-the-muffins",
+        "_meta_title": "",
+        "description": "Every conference needs a strategy.",
+        "gen_description": false,
+        "created": "2017-09-08T17:32:22Z",
+        "updated": "2017-09-08T18:05:36Z",
+        "status": 2,
+        "publish_date": "2017-09-08T17:30:14Z",
+        "expiry_date": null,
+        "short_url": "unset",
+        "in_sitemap": true,
+        "content": "<p><span>Every conference needs a strategy. As a species they are overwhelming, packed end-to-end with intellectually ...",
+        "user": 12,
+        "allow_comments": true,
+        "featured_image": "",
+        "categories": [],
+        "related_posts": [
+            21
+        ]
+    }
+},
+{
+    "model": "projectpages.project",
+    "pk": 1,
+    "fields": {
+        "project_title": "Princeton Prosody Archive",
+        "project_subtitle": "Full-text searchable database of prosody and versification texts",
+        "project_summary": "The Princeton Prosody Archive (PPA) is an incomplete, yet full-text searchable database of thousands of digitized prosodic works published between 1569 and 1923.",
+        "project_description": "<p>In its most general sense, \u201cprosody\u201d refers to the study of both versification in poetry and pronunciation. Versification includes a poem\u2019s rhythm, ...",
+        "project_create_update": "2016-09-20"
+    }
+},
+{
+    "model": "projectpages.projectpage",
+    "pk": 1,
+    "fields": {
+        "keywords_string": "prosody archive database versification",
+        "site": 1,
+        "title": "Princeton Prosody Archive",
+        "slug": "princeton-prosody-archive",
+        "_meta_title": "",
+        "description": "Princeton Prosody Archive",
+        "gen_description": true,
+        "created": "2016-09-20T15:47:24Z",
+        "updated": "2016-09-20T15:47:24Z",
+        "status": 2,
+        "publish_date": "2016-09-20T15:47:24Z",
+        "expiry_date": null,
+        "short_url": "",
+        "in_sitemap": true,
+        "project_data": 1,
+        "project_content": "",
+        "project_image": "PPA-300x232_WhjIy7C.png",
+        "override_image": "PPA-300x232_97wud1D.png"
+    }
+},
+{
+    "model": "projectpages.projectrole",
+    "pk": 1,
+    "fields": {
+        "title": "Project Director",
+        "rank": 100
+    }
+},
+{
+    "model": "projectpages.projectrole",
+    "pk": 2,
+    "fields": {
+        "title": "Project Manager",
+        "rank": 90
+    }
+},
+{
+    "model": "projectpages.projectrole",
+    "pk": 3,
+    "fields": {
+        "title": "Technical Lead",
+        "rank": 80
+    }
+},
+{
+    "model": "projectpages.projectmember",
+    "pk": 1,
+    "fields": {
+        "name": "Jean Bauer",
+        "project_role": 3,
+        "project": [
+            1
+        ]
+    }
+},
+{
+    "model": "projectpages.projectmember",
+    "pk": 2,
+    "fields": {
+        "name": "Meredith Martin",
+        "project_role": 1,
+        "project": [
+            1
+        ]
+    }
+},
+{
+    "model": "projectpages.projectmember",
+    "pk": 4,
+    "fields": {
+        "name": "Meagan Wilson",
+        "project_role": 2,
+        "project": [
+            1
+        ]
+    }
+}
+]

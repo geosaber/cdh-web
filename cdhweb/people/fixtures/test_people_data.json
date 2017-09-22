@@ -1,0 +1,46 @@
+[
+{
+  "model": "people.title",
+  "pk": 1,
+  "fields": {
+    "title": "Faculty Director",
+    "sort_order": 2
+  }
+},
+{
+  "model": "people.title",
+  "pk": 2,
+  "fields": {
+    "title": "Lead Developer",
+    "sort_order": 1
+  }
+},
+{
+  "model": "people.position",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "title": 2,
+    "start_date": "2016-10-17",
+    "end_date": null
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "",
+    "last_login": "2016-11-11T22:28:04.930Z",
+    "is_superuser": true,
+    "username": "developer",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2016-11-11T20:25:33.169Z",
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]

@@ -1,0 +1,1132 @@
+@import "normalize";
+@import "bourbon/bourbon";
+@import "base/base";
+@import "grid-settings";
+@import "fonts";
+
+
+/* container with max-width for large, medium, and small viewports */
+.responsive-container {
+    @include grid-container;
+    // can we use grid-collapse here to consume gutters or does it need to be on elements?
+    max-width: $large-content-width;
+    margin: auto;
+    @media (max-width: $medium-max-width) {
+        max-width: $medium-content-width;
+    }
+
+    @media (max-width: $small-max-width) {
+        max-width: $small-content-width;
+    }
+
+	/* uncomment for visual debugging
+    @include grid-visual();
+    @include grid-media($large-grid){
+      @include grid-visual();
+    } */
+
+}
+
+#maincontent {
+	@extend .responsive-container;
+}
+
+div.bleed-image-placeholder {
+	width: 100%;
+	height: 300px;
+	max-width: 1440px;
+	background-color: lightpink;
+	z-index: -5;
+	position: absolute;
+	text-align: center;
+	left: 0;
+	right: 0;
+	margin-top: 90px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div.spacer {
+	height: 340px;
+}
+
+/* mixin for diagonal blue stripes background */
+@mixin diagonal-blue-stripes {
+	background: repeating-linear-gradient(
+	  45deg,
+	  white,
+	  white 16px,
+	  $cdh-blue 4px,
+	  $cdh-blue 20px
+	);
+}
+
+@mixin dark-blue-gradient {
+	/* fallback background gradient for pages without an image */
+	background: $dark-cdh-blue; /* For browsers that do not support gradients */
+	background: linear-gradient($dark-cdh-blue, transparent);
+}
+
+@mixin large-card {
+ 	@include grid-column(4);
+	@include grid-media($large-grid){
+	    @include grid-column(4);
+	}
+	@media (max-width: $small-max-width) {
+		width: 100%;
+		float: none;
+		margin-left: 0;
+	}
+}
+
+@mixin small-card {
+ 	@include grid-column(3);
+	@include grid-media($large-grid){
+	    @include grid-column(3);
+	}
+
+	@media (max-width: $small-max-width) {
+		width: 225px;
+		float: none;
+	}
+}
+
+article.landing-page {
+	/* undo default body margin to clear top nav */
+	margin-top: -($header-nav-height*2);
+    @media (max-width: $small-max-width) {
+    	margin-top: -120px;  /* ?? */
+    }
+	// padding-top: 90px;
+	width: 100%;
+	position: relative;
+
+	header {
+		/* NOTE: styles currently for landing pages, may need adjustment */
+		width: 100%;
+		max-width: none;
+		height: 680px;
+		position: relative;
+		z-index: 1;
+
+		font-family: $font-stack-headline;
+		font-size: 64px;
+		color: #ffffff;
+		text-align: left;
+		background-size: cover;
+		background-position: 50% 50%;
+		background-repeat: no-repeat;
+
+		&.no-background {
+			/* needs to be separate because otherwise image doesn't scale properly */
+			@include dark-blue-gradient;
+		}
+
+	    @media (max-width: $small-max-width) {
+  	    	height: 320px;
+  	    }
+
+		div {
+			@extend .responsive-container;
+			padding-top: 336px;
+		    @media (max-width: $small-max-width) {
+  				padding-top: 88px;
+	  	    }
+		}
+		a.home {
+			color: $cdh-blue;
+			display: inline-block;
+			font-weight: normal;
+			text-decoration: none;
+			font-family: $font-stack-headline;
+
+		    @media (max-width: $small-max-width) {
+		    	font-size: 32px;
+		    }
+		}
+		h1 {
+			font-size: 100%;
+			font-family: $font-stack-headline;
+			display: inline-block;
+			margin-bottom: 10px;
+	    	font-weight: normal;
+
+		    @media (max-width: $small-max-width) {
+		    	font-size: 32px;
+
+		    }
+		}
+		p {
+			margin-top: 0;
+			font-size: 20px;
+			/* FIXME: according to design font should be brown-std-alt ? */
+			line-height: 1.2;
+
+		}
+		p::before {
+			content: "< ";
+			color: $cdh-blue;
+		}
+		p::after {
+			content: " >";
+			color: $cdh-blue;
+			display: inline;
+		}
+	}
+
+	div {
+		// @extend .responsive-container;
+	}
+
+	#maincontent {
+		// @extend .responsive-container;
+		margin-top: -116px;
+		background-color: white;
+		z-index: 4;  /* overlap background image from header */
+		padding: 80px 170px 100px;
+		position: relative;
+		min-height: 250px;
+
+	    @media (max-width: $medium-max-width) {
+  	    	padding: 80px 85px 100px;
+	    }
+
+	    @media (max-width: $small-max-width) {
+			margin-top: 0;
+  	    	padding: 30px 0px 100px;
+	    }
+	}
+
+	.attachments {
+		background-color: white;
+	}
+
+}
+
+.attachments {
+	@extend .responsive-container;
+	clear: both;
+}
+
+
+/* Custom mixin to generate css triangles at top left and bottom right
+   to mimic the look of the cdh logo.  Argument is logo shadow width */
+@mixin cdhlogo-shadow($width) {
+	/* NOTE: might be able to use bourbon triangle mixin here, but this is working */
+
+	/* triangle top right */
+	&::after {
+		width: 0;
+		height: 0;
+		border-top: $width solid $light-grey;
+		border-left: $width solid transparent;
+		content: ' ';
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+
+	/* triangle bottom left */
+	&::before {
+		width: 0;
+		height: 0;
+		border-bottom: $width solid $light-grey;
+		border-right: $width solid transparent;
+		content: ' ';
+		position: absolute;
+		left: 0;
+		bottom: 0;
+
+	}
+}
+
+/* card layouts - projects, events */
+
+$event-card-height: 426px;
+$event-card-img-height: 240px;
+
+.card {
+	position: relative;
+	margin-bottom: 50px;
+	@include diagonal-blue-stripes;
+
+	h2 {   /* card-head in zeplin */
+		font-family: $font-stack-headline-bold;
+		font-size: 18px;
+		color: #000000;
+		margin-top: 0;
+	}
+
+	a {
+		text-decoration: none;
+		color: $dark-grey;
+		display: block;  /* make the whole card clickable */
+		width: 100%;
+		height: 100%;
+	}
+
+	.content {.  /* card-description font */
+		font-family: $font-stack-headline;
+		font-size: 16px;
+		background-color: white;
+	}
+
+	/* event cards */
+	&.event {
+		@include large-card;
+
+		height: $event-card-height;
+		/* background options for when an image is added in the template */
+		background-size: cover;
+		/* background-position: 50% 50%;  maybe? */
+		background-repeat: no-repeat;
+
+		.content {
+			position: absolute;
+			top: $event-card-img-height;
+			width: 100%;
+			height: $event-card-height - $event-card-img-height;
+
+			> *  {
+				padding-left: 15px;
+			}
+
+			h2 {
+				padding-top: 15px;
+				margin-bottom: 0;
+			}
+
+		}
+
+		.event-type {
+			position: absolute;
+			/* width: 104px; */
+			z-index: 5;
+			top: -12px;
+			left: 15px;
+			border: 2px solid $cdh-blue;
+			box-shadow: 5px 5px 0px $cdh-blue;
+			background-color: white;
+			/* TODO:  font style not clear in zeplin */
+			font-family: $font-stack-headline;
+			font-size: 12px;
+			padding: 2px 5px;
+		}
+		.when {
+			position: absolute;
+			bottom: 15px;
+			left: 15px;
+		}
+		.time {
+			padding-left: 20px;
+		}
+
+	} /* end event card */
+
+	/* project cards */
+	&.project {
+		@include small-card;
+		height: 170px;
+
+		h2 {
+			margin-bottom: 0;
+		}
+
+		@include cdhlogo-shadow(40px);
+
+		&:hover {
+			/* using important to override background image set in template */
+		 	background: $cdh-blue !important;
+		}
+		a {
+			background-color: white;
+			// full width and height minus border
+			width: calc(100% - 40px);
+			height: calc(100% - 40px);
+			padding: 12px 17px 0 14px;
+			margin: 0;
+			overflow: hidden;
+		}
+
+		p {
+			font-family: $font-stack-body-text;
+			font-style: italic;
+			font-size: 15px;
+			color: $dark-grey;
+			line-height: 1.33;
+			margin: 0;
+		}
+
+	}
+
+	/* larger project card */
+	&.project-large {
+		@include large-card;
+
+		height: 233px;
+		@include cdhlogo-shadow(55px);
+
+		a {
+			// full width and height minus border and padding
+			width: calc(100% - 55px);
+			height: calc(100% - 55px);
+			padding: 16px 44px 0 19px;
+		}
+
+	}
+
+	/* profile cards */
+	&.profile {
+		@include large-card;
+		background: none; /* no blue stripes */
+
+		// @include dark-blue-gradient;
+		/* styles for image as photo */
+		background-size: contain;
+		background-repeat: no-repeat;
+		height: 305px;
+
+		a {
+			display: block;  /* make the whole card clickable */
+			width: 100%;
+			height: 100%;
+		}
+
+		.content {
+			padding-top: 240px;
+			background-color: transparent;
+			font-family: $font-stack-headline-bold;
+
+			.title {
+				padding-top: 15px;
+				font-size: 16px;
+				margin: 0;
+				color: $dark-grey;
+			}
+			.name {
+				margin: 0;
+				font-weight: bold;
+				font-size: 18px;
+				color: black;
+			}
+		}
+
+		@media (max-width: $small-max-width) {
+			width: 100%;
+			margin-left: 0;
+			float: none;
+		}
+
+
+		h2 {
+			margin-bottom: 0;
+		}
+	}
+
+	&.attachment {
+		@include small-card;
+		background: none;
+		position: relative;
+
+		/* use this to make the card square -
+		   via https://stackoverflow.com/questions/38998423/bourbon-neat-square-grid */
+ 	    &::before {
+	   		content: "";
+		    display: block;
+		    padding-top: 100%;
+  	    }
+
+		a {
+			position: absolute;
+			top: 0;
+			left: 0;
+			display: block;
+
+			border: solid 2px #d8d8d8;
+			width: 100%;
+			height: 100%;
+			padding: 15px;
+
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-end;
+		    align-items: flex-end;
+
+		    h2, div {
+		    	display: block;
+		    	width: 100%;
+		    	margin-bottom: 0;
+		    }
+		    .author {
+		    	font-family: $font-stack-headline;
+		    	// margin-top: 7px;
+		    	padding: 0;
+		    }
+
+			&:hover {
+				border: solid 2px $action-color;
+			}
+
+			&::after {
+				content: " ";
+				position: absolute;
+				z-index: 5;
+				top: -12px;
+				right: 15px;
+				width: 42px;
+				height: 52px;
+				background-image: url('../img/icons/CDH_icon_doc.svg');
+				background-size: contain;
+				background-repeat: no-repeat;
+			}
+		}
+
+		/* variant icons */
+		&.pdf {
+			a::after {
+				background-image: url('../img/icons/CDH_icon_pdf.svg');
+			}
+		}
+		&.video {
+			a::after {
+				background-image: url('../img/icons/CDH_icon_vid.svg');
+			}
+		}
+		&.url {
+			a::after {
+				background-image: url('../img/icons/CDH_icon_link.svg');
+			}
+		}
+	}
+
+}
+
+
+.homepage section {
+	@include grid-container;
+}
+
+
+@mixin header-with-icon {
+	/* font-family: BrownStd-Alt;    ?? */
+	font-family: $font-stack-headline;
+	font-size: 16px;
+	font-weight: normal;
+	font-style: normal;
+	font-stretch: normal;
+	line-height: 54px;
+	letter-spacing: normal;
+	color: $dark-grey;
+
+	height: 54px;
+	padding-left: 73px;
+	vertical-align: middle;
+	margin-bottom: 50px;
+
+	background-repeat: no-repeat;
+	background-size: 50px 54px;
+}
+
+.homepage section > h2 {
+	@include header-with-icon;
+	a {
+		text-decoration: none;
+		color: $dark-grey;
+	}
+}
+// TODO: mixin for icons, support h1 for individual pages
+
+.events > h2, .events h1 {
+	background-image: url('../img/icons/CDH_icon_cal.svg');
+	@include header-with-icon;
+}
+
+.projects > h2, .projects h1 {
+	background-image: url('../img/icons/CDH_icon_folder.svg');
+	@include header-with-icon;
+}
+
+.people > h2, .people h1 {
+	background-image: url('../img/icons/CDH_icon_ppl.svg');
+	@include header-with-icon;
+}
+
+.blogposts h1 {
+	background-image: url('../img/icons/CDH_icon_doc.svg');
+	@include header-with-icon;
+}
+
+
+// events or blogposts archives nav
+
+.archive-nav {
+	float: right;
+	text-align: right;
+	position: relative;
+
+	.submenu {
+		@include list-style-reset;
+		display: none;
+		font-family: $font-stack-headline;
+		font-size: 16px;
+		background-color: $light-grey;
+		background-color: rgba(248, 248, 248, 0.85);
+		position: absolute;
+		padding: 15px;
+		right: 0;
+		z-index: 6;
+
+		a {
+			text-decoration: none;
+			color: $dark-grey;
+		}
+
+		.current a {
+			border-bottom: 2px solid $cdh-blue;
+		}
+
+		li {
+			white-space: nowrap;
+		}
+
+	}
+}
+
+
+.ribbon-box {
+  @include size(350px);
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 11;
+  background: transparent;
+  font-size: 14px;
+
+  opacity: 0.95;
+  transition:opacity 0.2s;
+
+  &.fade {
+   opacity:0.3;
+   pointer-events: none;
+	  button {
+	  	display: none;
+	  }
+  }
+
+  h2 {
+  	font-family: $font-stack-body-text;
+  }
+
+  button {
+  	border: $light-grey;
+  	border-radius: 5px;
+  	color: black;
+  	background-color: $light-grey;
+  	padding: 5px;
+  	margin-bottom: 5px;
+  }
+}
+
+.ribbon-wrapper {
+  // $action-color: red !default;
+  $action-color: rgb(255, 69, 69) !default;
+  // $action-color: #477dca !default;
+  $ribbon-background: $action-color;
+  $ribbon-size: 375px;
+
+  @include size($ribbon-size);
+  overflow: hidden;
+  position: absolute;
+  right: -1px;
+  top: -1px;
+
+  .ribbon {
+    background-color: $ribbon-background;
+    // box-shadow: 0 0 3px rgba(#000, 0.3);
+    color: #fff;
+    font-size: 0.8em;
+    right: -75px;
+    line-height: 1.5em;
+    padding: 2px 7px;
+    position: relative;
+    text-align: center;
+    top: 55px;
+    transform: rotate(45deg);
+    width: 400px;
+  }
+}
+
+
+.project-detail {
+
+	header {
+		@include grid-container;
+        @include grid-collapse;
+
+    	/* full width of container */
+    	margin-left: 0;
+    	margin-right: 0;
+    	width: auto;
+
+  		@include grid-push(3);
+		@include grid-media($large-grid) {
+			@include grid-container;
+	        @include grid-collapse($large-grid);
+	  		@include grid-push(3);
+	  	}
+	    @media (max-width: $small-max-width) {
+	    	@include grid-push(0);
+	    	/* full width of container */
+	    	margin-left: 0;
+	    	margin-right: 0;
+	    	width: auto;
+	    }
+
+	  	.short_description {
+	  		font-style: italic;
+
+			margin-left: 0;
+		    margin-right: 0;
+	    	width: auto;
+
+			@include grid-media($large-grid){
+			    @include grid-column(7);
+			    margin-left: 0;
+			}
+
+	  	}
+	}
+	.contributors {
+		@include grid-column(3);
+		@include grid-media($large-grid){
+		    @include grid-column(3);
+		}
+	    @media (max-width: $small-max-width) {
+	    	width: 100%;
+	    }
+
+	    @media (max-width: $small-max-width) {
+	    	margin-left: 0;
+	    	margin-right: 0;
+	    	width: auto;
+	    }
+
+		ul {
+			list-style-type: none;
+			color: $dark-grey;
+			padding: 0;
+			font-family: $font-stack-body-text;
+
+			li.role {
+				margin-top: 15px;
+			}
+		}
+
+		h3 {
+			font-weight: normal;
+			font-style: italic;
+			font-size: 18px;
+			margin-bottom: 0;
+			font-family: $font-stack-body-text;
+		}
+
+        a {
+	    	color: black;
+	    	text-decoration: none;
+	    	font-family: $font-stack-headline;
+	    	font-size: 18px;
+	    }
+
+	}
+
+	.description {
+		@include grid-column(6);
+		@include grid-media($large-grid){
+		    @include grid-column(9);
+		}
+
+		@media (max-width: $small-max-width) {
+	    	margin-left: 0;
+	    	margin-right: 0;
+	    	width: auto;
+	    }
+
+		img {
+			max-width: 100%;
+			margin: 50px auto;
+		}
+		p {
+			margin-top: 0;
+		}
+	}
+
+
+}
+
+
+.profile {
+	/* very similar to project detail;
+	  TODO: make mixins or includes for common layout */
+	@include grid-container;
+
+	header {
+		@include grid-container;
+        @include grid-collapse;
+
+    	/* full width of container */
+    	margin-left: 0;
+    	margin-right: 0;
+    	width: auto;
+
+  		@include grid-push(3);
+		@include grid-media($large-grid) {
+			@include grid-container;
+	        @include grid-collapse($large-grid);
+	  		@include grid-push(3);
+	  	}
+	    @media (max-width: $small-max-width) {
+	    	@include grid-push(0);
+	    	/* full width of container */
+	    	margin-left: 0;
+	    	margin-right: 0;
+	    	width: auto;
+	    }
+
+	  	.title {   /* equiv to project short_description */
+	  		font-style: italic;
+	  		font-family: $font-stack-body-text;
+	  		color: $dark-grey;
+	  		font-size: 21px;
+
+			margin-left: 0;
+		    margin-right: 0;
+	    	width: auto;
+
+			@include grid-media($large-grid){
+			    @include grid-column(7);
+			    margin-left: 0;
+			}
+
+	  	}
+	}
+	.links {
+		/* same sidebar layout as project contributors */
+		text-transform: capitalize;
+		margin-bottom: 35px;
+
+		@include grid-column(3);
+		@include grid-media($large-grid){
+		    @include grid-column(3);
+		}
+
+	    @media (max-width: $small-max-width) {
+	    	margin-left: 0;
+	    	margin-right: 0;
+	    	width: auto;
+	    }
+
+		ul {
+			list-style-type: none;
+			color: $dark-grey;
+			padding: 0;
+		}
+
+		 a {
+	    	color: black;
+	    	text-decoration: none;
+	    	font-family: $font-stack-headline;
+	    	font-size: 18px;
+	    }
+	}
+
+	img {
+		margin: 0 0 50px 0;
+    	width: auto;
+
+		@include grid-column(5);
+		@include grid-media($large-grid){
+			@include grid-column(5);
+		}
+		@media (max-width: $small-max-width) {
+	    	margin-left: 0;
+	    	margin-right: 0;
+	    	width: auto;
+	    }
+	}
+
+	.education {
+		color: $dark-grey;
+		font-family: $font-stack-headline;
+		font-size: 18px;
+
+		@include grid-column(4);
+		@include grid-push(3);
+		@include grid-media($large-grid){
+			@include grid-column(4);
+		}
+		@media (max-width: $small-max-width) {
+	    	margin-left: 0;
+	    	margin-right: 0;
+	    	width: auto;
+	    }
+	    a {
+	    	color: $dark-grey ;
+	    	text-decoration: none;
+	    	// background-image: none !important;
+	    }
+
+	    ul {
+	    	@include list-style-reset;
+
+	    	li {
+	    		margin-bottom: 20px;
+	    	}
+	    }
+	}
+	p {
+		margin-top: 0;
+		@media (max-width: $small-max-width) {
+	    	margin-left: 0;
+	    	margin-right: 0;
+	    	width: auto;
+	    }
+
+	}
+
+	.bio {
+		@include grid-column(6);
+		@include grid-push(3);
+		@include grid-media($large-grid){
+			@include grid-column(8);
+			@include grid-push(3);
+		}
+		@media (max-width: $small-max-width) {
+	    	margin-left: 0;
+	    	margin-right: 0;
+	    	width: auto;
+	    }
+
+	}
+
+
+}
+
+.event-detail {
+	/* very similar to project detail and profile;
+	  TODO: make mixins or includes for common layout */
+	@include grid-container;
+
+	header {
+		@include grid-container;
+        @include grid-collapse;
+
+    	/* full width of container */
+    	margin-left: 0;
+    	margin-right: 0;
+    	width: auto;
+
+  		@include grid-push(3);
+		@include grid-media($large-grid) {
+			@include grid-container;
+	        @include grid-collapse($large-grid);
+	  		@include grid-push(3);
+	  	}
+	    @media (max-width: $small-max-width) {
+	    	@include grid-push(0);
+	    	/* full width of container */
+	    	margin-left: 0;
+	    	margin-right: 0;
+	    	width: auto;
+	    }
+
+	  	.short_description {   /* equiv to project short_description */
+	  		font-style: italic;
+	  		font-family: $font-stack-body-text;
+	  		color: $dark-grey;
+	  		font-size: 21px;
+
+			margin-left: 0;
+		    margin-right: 0;
+	    	width: auto;
+
+			@include grid-media($large-grid){
+			    @include grid-column(7);
+			    margin-left: 0;
+			}
+
+	  	}
+	}
+	.details {
+		/* same sidebar layout as project contributors */
+		margin-bottom: 35px;
+		font-family: $font-stack-headline;
+		color: $dark-grey;
+		font-size: 18px;
+
+		@include grid-column(3);
+		@include grid-media($large-grid){
+		    @include grid-column(3);
+		}
+	    @media (max-width: $small-max-width) {
+	    	width: 100%;
+	    }
+
+	    @media (max-width: $small-max-width) {
+	    	margin-left: 0;
+	    	margin-right: 0;
+	    	width: auto;
+	    }
+
+		ul {
+			list-style-type: none;
+			color: $dark-grey;
+			padding: 0;
+		}
+
+		 a {
+	    	color: $dark-grey;
+	    	text-decoration: none;
+	    	font-family: $font-stack-headline;
+	    	font-size: 18px;
+
+	    	&.ical {
+	    		margin-top: 37px;
+	    		padding-top: 75px;
+	    		display: block;
+				background-image: url('../img/icons/CDH_icon_cal.svg');
+				background-size: 50px 54px;
+				background-repeat: no-repeat;
+
+	    	}
+	    }
+
+	    .location {
+	    	margin-top: 16px;
+	    }
+	}
+
+	img {
+		margin: 0 0 50px 0;
+    	width: auto;
+
+		@include grid-column(6);
+		@include grid-media($large-grid){
+			@include grid-column(9);
+		}
+		@media (max-width: $small-max-width) {
+			margin: 0 0 50px 0;
+	    	width: auto;
+	    }
+	}
+
+	.description {
+		clear: both;
+		@include grid-column(6);
+		@include grid-shift(3);
+
+		@include grid-media($large-grid){
+		    @include grid-column(9);
+			@include grid-shift(3);
+		}
+
+		@media (max-width: $small-max-width) {
+			@include grid-shift(0);
+	    	margin-left: 0;
+	    	margin-right: 0;
+	    	width: auto;
+	    }
+
+		img {
+			max-width: 100%;
+			margin: 50px auto;
+		}
+		p {
+			margin-top: 0;
+		}
+	}
+
+}
+
+section.blogposts {
+	@include grid-container;
+}
+
+.blogpost {
+	// margin-top: 340px; // currently handled by spacer div
+	padding: 0;
+	margin-bottom: 50px;
+
+	@include grid-media($large-grid) {
+		@include grid-shift(2);
+		@include grid-column(8);
+	}
+	header {
+		h1 {
+			margin-top: 250px - $header-nav-height;
+			margin-bottom: 50px;
+		}
+
+		.byline {
+			font-family: $font-stack-headline;
+			font-size: 16px;
+			color: $dark-grey;
+			margin-bottom: 50px;
+
+			.authors {
+				padding-right: 37px;
+				display: inline-block;
+
+				@media (max-width: $small-max-width) {
+					display: block;
+					padding-right: 0;
+				}
+			}
+		}
+
+		a {
+			color: $dark-grey;
+			text-decoration: none;
+		}
+	}
+
+	p {
+		margin-bottom: 50px;
+	}
+
+	.keywords {
+		font-size: 90%;
+		color: $dark-grey;
+	}
+}
+
+
+.pagination, .feeds {
+	text-align: center;
+	color: $dark-grey;
+	a {
+		text-decoration: none;
+		color: $dark-grey;
+
+		&.current {
+		  /* use background to do a colored underline */
+		  background-image: linear-gradient(to right, $cdh-blue 100%, transparent 0%);
+		  background-position: 0 0.85em;
+		  background-repeat: repeat-x;
+		  background-size: 8px 2px;
+		}
+	}
+}
+
+.feeds {
+	@extend .responsive-container;
+	text-align: left;
+	font-size: small;
+	margin-top: 50px;
+	font-family: $font-stack-headline;
+}
+
+.error-page {
+	img {
+		width: 50%;
+	}
+}

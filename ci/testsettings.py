@@ -13,3 +13,7 @@ DATABASES = {
         'NAME': 'cdhweb.db'
     }
 }
+
+# required with django 1.11 when debug is false, even for tests
+ALLOWED_HOSTS = ["*"]
+

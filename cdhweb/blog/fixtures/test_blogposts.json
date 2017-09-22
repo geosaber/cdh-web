@@ -1,0 +1,72 @@
+[
+{
+    "model": "auth.user",
+    "pk": 29,
+    "fields": {
+        "password": "",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "rmunson",
+        "first_name": "Rebecca",
+        "last_name": "Munson",
+        "email": "rmunson@princeton.edu",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-09-14T21:10:54.229Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "blog.blogpost",
+    "pk": 1,
+    "fields": {
+        "keywords_string": "",
+        "site": 1,
+        "title": "Are you our new DH Developer?",
+        "slug": "are-you-our-new-dh-developer",
+        "_meta_title": "",
+        "description": "The CDH is hiring! \u00a0We are looking for a curious, committed, and collegial colleague to join our Development and Design Team as our second Digital Humanities\u00a0Developer. You will work with database designers, UX designers, project managers, fellow programmers\u00a0and the faculty, students and staff of Princeton University to create innovating\u00a0projects and contribute back to the Open Source software community. \u00a0",
+        "gen_description": true,
+        "created": "2017-08-10T15:02:53Z",
+        "updated": "2017-09-20T17:16:43.757Z",
+        "status": 2,
+        "publish_date": "2017-08-10T15:02:53Z",
+        "expiry_date": null,
+        "short_url": "unset",
+        "in_sitemap": true,
+        "content": "<p>The CDH is hiring! \u00a0We are looking for a curious, committed, and collegial colleague to join our Development and Design Team as our second Digital Humanities\u00a0Developer. You will work with database designers, UX designers, project managers, fellow programmers\u00a0and the faculty, students and staff of Princeton University to create innovating\u00a0projects and contribute back to the Open Source software community. \u00a0</p>\n<p>CDH projects are typically developed on a Python/Django/MySQL stack. We are looking for someone who can contribute to full stack development, but with a specific focus on frontend development, bonus points if you have a background in data visualization. \u00a0This may be the job for you if:</p>\n<ul>\n<li>You love thinking through the intricacies of translating humanities data and research questions into software</li>\n<li>You have favorite\u00a0javascript frameworks for creating generous, data-driven interfaces</li>\n<li>You are relieved when a new unit test finds a bug in your code</li>\n<li>You appreciate good documentation</li>\n<li>You are willing to take the lead on a project and own a codebase</li>\n<li>You thrive in a collegial academic research environment</li>\n<li>You have a research project you want to work on</li>\n</ul>\n<p>This position reports to CDH's Lead Developer, <a href=\"/about/staff/rebecca-sutton-koeser\">Rebecca Sutton Koeser</a> and qualifies for 20% R&amp;D. It is a full time, full benefits, onsite position. \u00a0Rellocation expenses will be covered for the successful candidate who lives beyond reasonable community distance.</p>\n<p>See the full job listing here: <a href=\"https://main-princeton.icims.com/jobs/7530/digital-humanities-developer/job?hub=15&amp;mobile=false&amp;width=1200&amp;height=500&amp;bga=true&amp;needsRedirect=false&amp;jan1offset=-300&amp;jun1offset=-240\">Digital Humanities Developer Job Posting</a>.</p>",
+        "featured_image": "",
+        "users": [],
+        "related_posts": [],
+        "attachments": []
+    }
+},
+{
+    "model": "blog.blogpost",
+    "pk": 23,
+    "fields": {
+        "keywords_string": "DH2017 meetup projectmanagement projectdesign community storify",
+        "site": 1,
+        "title": "So Long, and Thanks for All the Muffins",
+        "slug": "so-long-and-thanks-for-all-the-muffins",
+        "_meta_title": "",
+        "description": "Every conference needs a strategy. As a species they are overwhelming, packed end-to-end with intellectually appealing events and social occasions. Try to do too much and you\u2019ll end up too exhausted for later events. Try to do too little and you\u2019ll be victim of some intense FOMO. Your humble blogger has made both these mistakes at other conferences and, as a first-time attendee of DH, was determined not to make them again. I stayed in the McGill \u201cdorms\u201d (think 3-star hotel complete with free breakfast) for maximum proximity so that, between events, I could rest, hydrate, and change shoes so that I was never in heels for more than 3 hours at a time. (I broke this last rule the night of the closing banquet.)",
+        "gen_description": true,
+        "created": "2017-09-08T17:32:22Z",
+        "updated": "2017-09-20T17:26:57.049Z",
+        "status": 2,
+        "publish_date": "2017-09-08T17:30:14Z",
+        "expiry_date": null,
+        "short_url": "unset",
+        "in_sitemap": true,
+        "content": "<p><span>Every conference needs a strategy. As a species they are overwhelming, packed end-to-end with intellectually appealing events and social occasions. Try to do too much and you\u2019ll end up too exhausted for later events. Try to do too little and you\u2019ll be victim of some intense FOMO. Your humble blogger has made both these mistakes at other conferences and, as a first-time attendee of DH, was determined not to make them again. I stayed in the McGill \u201cdorms\u201d (think 3-star hotel complete with free breakfast) for maximum proximity so that, between events, I could rest, hydrate, and change shoes so that I was never in heels for more than 3 hours at a time. (I broke this last rule the night of the closing banquet.)</span></p>\n<p></p>\n<p><span>Compared to the literary studies conferences I was used, I found DHers to be united less by a common research interest and more by common methodologies. The panels and workshops were consequently many and varied, offering perspective and expertise in particular tools and programs, practical advice about project infrastructure, reflections on the place of DH in the structure of the university, provocations to be part of social justice movements and activism, and advice on pedagogical practices (to name just a few). It was new. It was exciting. It was hard to choose. </span></p>\n<p></p>\n<p><span>Happily, one of the things that surprised this newcomer was the incredible activity on the #dh2017 Twitter tag. I ended up feeling a close sense of community with my fellow tweeters even though we hadn\u2019t met IRL. I also came to the conference on the lookout for Twitter friends, scoping the crowd for anyone who looked like their avatar (a dubious practice). In both cases, I found myself musing on the value of the face-to-face in a digital world. As a scholar, I love the mutual support and interdependence of old and new media. I ended up feeling the same way about social interactions--I needed the digital and the analog. And despite the wealth of tools available I came away with the firm belief that the best social networking still happens in bars.</span></p>\n<p></p>\n<p><span>Because so much of DH2017 took place in the immediate, interactive realm of Twitter I felt that the best way for me to capture my conference experience was with a Storify, which you can read here: </span><a href=\"https://storify.com/Shxperienced/my-first-dh\"><span>https://storify.com/Shxperienced/my-first-dh</span></a></p>\n<p></p>\n<p><span>Finally, I want to reflect that it\u2019s wonderful that Storify gives you the ability to freeze moments in time and collect them into a meaningful arrangement...because that is what I believe annotations do and what we, as scholars who study them, are always hoping to recreate. So I bequeath this mini-archive to the historians of the future, though they will have to provide the footnotes explaining all the GIFs.</span></p>",
+        "featured_image": "",
+        "users": [
+            29
+        ],
+        "related_posts": [],
+        "attachments": []
+    }
+}
+]

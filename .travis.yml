@@ -3,15 +3,20 @@ language: python
 python:
   - "3.5"
 
+before_install:
+  - rvm install 2.0
+  - gem install sass
+  - npm install -g postcss-cli autoprefixer
+
 install:
   - pip install -r requirements.txt
   - pip install -r dev-requirements.txt
   - pip install codecov
-  - cp ci/testsettings.py cdhWebsite/local_settings.py
-  - python -c "import uuid; print('SECRET_KEY = \'%s\'' % uuid.uuid4())" >> cdhWebsite/local_settings.py
+  - cp ci/testsettings.py cdhweb/local_settings.py
+  - python -c "import uuid; print('SECRET_KEY = \'%s\'' % uuid.uuid4())" >> cdhweb/local_settings.py
 
 script:
-  - py.test --cov=./
+  - py.test --cov=cdhweb
 
 after_success:
 - codecov

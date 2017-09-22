@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load mezzanine_tags %}
+
+{% block page-subtitle %}{{ profile.title }} | People | {% endblock %}
+
+{% block main %}
+<div class="profile">
+<header>
+    <h1>{{ profile.title }}</h1>
+    <p class="title">{{ profile.current_title|default:'' }}</p>
+</header>
+
+<div class="links">
+    {# NOTE equiv to contributors in project #}
+    <ul>
+    {% for resource in profile.user.resources.all %}
+        <li><a href="{{ resource.url }}">{{ resource.name }} {{ resource.url }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
+
+{% if profile.image %}
+<img src="{{ MEDIA_URL }}{{ profile.image }}"/>
+{% endif %}
+
+<div class="education">
+{{ profile.education|safe }}
+<a href="mailto:{{ profile.user.email }}">{{ profile.user.email }}</a>
+</div>
+
+<div class="bio">
+{{ profile.bio|safe }}
+</div>
+
+{% endblock %}
