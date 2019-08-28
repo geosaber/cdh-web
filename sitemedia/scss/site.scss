@@ -216,8 +216,8 @@ article.landing-page {
 		    @media (max-width: $small-max-width) {
                 padding-top: 88px;
             }
-              
-            text-shadow: 0 0 50px rgba(0, 0, 0, 0.5); 
+
+            text-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
 		}
 		a.home {
 			color: $cdh-blue;
@@ -1374,8 +1374,16 @@ $event-card-img-height: 240px;
 	    	}
 	    }
 	}
+
+
 	p {
 		margin: 0 auto 50px;
+	}
+
+	&.card {
+		p {
+			margin: 0 auto;
+		}
 	}
 
     .bio,
@@ -1686,7 +1694,7 @@ body.richtextpage {
 		}
 
     }
-    
+
     /* triangular indicator/watermark for draft pages */
     &.draft {
         &::before,

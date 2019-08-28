@@ -149,6 +149,11 @@ class PostdocListView(ProfileListView):
         # we only care about current position, grant doesn't matter
         return self.object_list.current_position()
 
+    def get_past_profiles(self):
+        # show most recent first
+        return super().get_past_profiles()\
+            .order_by('-user__positions__end_date')
+
 
 class StudentListView(ProfileListView):
     '''Display current and past graduate fellows, graduate and undergraduate
@@ -158,7 +163,16 @@ class StudentListView(ProfileListView):
 
     def get_queryset(self):
         # filter to just students
-        return super().get_queryset().student_affiliates().grant_years()
+        return super().get_queryset().student_affiliates() \
+            .grant_years().project_manager_years()
+
+    def get_past_profiles(self):
+        # show most recent first
+        return super().get_past_profiles()\
+            .order_by('-user__positions__end_date')
+
+    # def get_past_profiles(self):
+    #     return super().get_past_profiles.order_by()
 
 
 class FacultyListView(ProfileListView):

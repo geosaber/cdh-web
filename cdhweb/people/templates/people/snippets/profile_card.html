@@ -12,21 +12,15 @@
         <div class="content">
             <p class="name">{{ profile.title }}</p> {# profile page title = person's name #}
             <div class="title">
-            {% with position=profile.user.positions.first %}
-                {% if show_cdh_position and position %} {# show position within the cdh #}
-                    <p>{% if not position.is_current %}{{ position.years }}{% if show_grant and profile.user.latest_grant %}{% else %}<br/>{% endif %}{% endif %}
-                    {# when showing both position and grant, if person has both omit line breaks #}
-                    {{ profile.user.positions.first.title|default:'' }}</p>
-                {% endif %}
-            {% endwith %}
             {# NOTE: right now, if someone has both grant and cdh staff role, both will show #}
             {% if show_grant %} {# display grant role #}
                 {% with grant=profile.user.latest_grant %}
                     {% if grant %}
                     {# NOTE: for unknown reasons, on qa these are not returned as date objects; handle either date or YYYY-MM-DD string#}
                         <p>{% if profile.first_start and profile.last_end %}
-                            {% firstof profile.first_start.year profile.first_start|slice:":4" %}–{% firstof profile.last_end.year profile.last_end|slice:":4" %}{% if show_cdh_position and profile.user.positions.first %}{% else %}<br/>{% endif %}
-                        {# when showing both position and grant, if person has both omit line breaks #}
+                            {% firstof profile.first_start.year profile.first_start|slice:":4" as start_year %}
+                            {% firstof profile.last_end.year profile.last_end|slice:":4" as end_year %}
+                            {{ start_year }}{% if start_year != end_year %}–{{ end_year }}{% endif %}
                         {% elif not grant.is_current %}{{ grant.years }}{% endif %}
                         {# special case for faculty fellowship display #}
                         {% if grant.grant_type.grant_type == 'Faculty Fellowship' %}Faculty Fellow{% else %}
@@ -34,6 +28,17 @@
                     {% endif %}
                 {% endwith %}
             {% endif %}
+            {% if profile.pm_start %}
+                {% if not profile.is_current %}{{ profile.pm_start.year }}–{{ profile.pm_end.year }}{% endif %}
+                Project Manager
+            {% endif %}
+            {% with position=profile.user.positions.first %}
+                {% if show_cdh_position and position %} {# show position within the cdh #}
+                    <p>{% if not position.is_current %}{{ position.years }}{% endif %}
+                    {# when showing both position and grant, if person has both omit line breaks #}
+                    {{ profile.user.positions.first.title|default:'' }}</p>
+                {% endif %}
+            {% endwith %}
             {% if show_affiliation and profile.institution %} {# show institutional affiliation #}
                 {{ profile.institution }}<br/>
             {% endif %}

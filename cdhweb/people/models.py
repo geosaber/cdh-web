@@ -105,7 +105,6 @@ class Person(User):
         if mship:
             return mship.grant
 
-
     def __str__(self):
         '''Custom person display to make it easier to choose people
         in admin menus.  Uses profile title if available, otherwise combines
@@ -129,6 +128,9 @@ class ProfileQuerySet(PublishedQuerySetMixin):
     #: position titles that indicate a staff person is a student
     student_titles = ['Graduate Fellow', 'Graduate Assistant',
                       'Undergraduate Assistant']
+    #: memebership roles that indicate someone is an affiliate
+    project_roles = ['Project Director', 'Project Manager']
+
     #: student status codes from LDAP
     student_pu_status = ['graduate', 'undergraduate']
 
@@ -144,22 +146,21 @@ class ProfileQuerySet(PublishedQuerySetMixin):
     def postdocs(self):
         '''Return CDH Postdoctoral Fellows, based on role title'''
         return self.filter(
-            models.Q(user__positions__title__title__icontains=self.postdoc_title)
-            | models.Q(user__positions__title__title=self.postgrad_title))
+            models.Q(user__positions__title__title__icontains=self.postdoc_title) |
+            models.Q(user__positions__title__title=self.postgrad_title))
 
     def not_postdocs(self):
         '''Exclude CDH Postdoctoral Fellows, based on role title'''
         return self.exclude(
-            models.Q(user__positions__title__title__icontains=self.postdoc_title)
-            | models.Q(user__positions__title__title=self.postgrad_title))
+            models.Q(user__positions__title__title__icontains=self.postdoc_title) |
+            models.Q(user__positions__title__title=self.postgrad_title))
 
     def student_affiliates(self):
-        '''Return CDH student staff members and grantees based on Project Director
-        role.'''
-        return self.filter(
-            models.Q(pu_status__in=self.student_pu_status) &
-            (models.Q(is_staff=True) |
-             models.Q(user__membership__role__title='Project Director')))
+        '''Return CDH student staff members and grantees based on
+        Project Director or Project Manager role.'''
+        return self.filter(pu_status__in=self.student_pu_status) \
+            .filter(models.Q(is_staff=True) |
+                    models.Q(user__membership__role__title__in=self.project_roles))
 
     def not_students(self):
         '''Filter out graduate and undergraduates based on PU status'''
@@ -197,6 +198,20 @@ class ProfileQuerySet(PublishedQuerySetMixin):
                 models.When(user__membership__role__title='Project Director',
                             then='user__membership__grant__end_date'))))
 
+    def project_manager_years(self):
+        '''Annotate with first start and last end grant year for grants
+        that a person was project manager.'''
+        # NOTE: filters within the aggregation query on project manager
+        # but not on the entire query so that e.g. on the students
+        # page student staff without grants are still included
+        return self.annotate(
+            pm_start=models.Min(models.Case(
+                models.When(user__membership__role__title='Project Manager',
+                            then='user__membership__grant__start_date'))),
+            pm_end=models.Max(models.Case(
+                models.When(user__membership__role__title='Project Manager',
+                            then='user__membership__grant__end_date'))))
+
     def speakers(self):
         '''Return external speakers at CDH events.'''
         # Speakers are non-Princeton profiles (external) who are associated with
@@ -217,7 +232,7 @@ class ProfileQuerySet(PublishedQuerySetMixin):
     def _current_grant_query(self):
         today = timezone.now()
         return (
-            models.Q(user__membership__role__title='Project Director') &
+            models.Q(user__membership__role__title__in=self.project_roles) &
             (models.Q(user__membership__grant__start_date__lte=today) &
              (models.Q(user__membership__grant__end_date__gte=today) |
               models.Q(user__membership__grant__end_date__isnull=True))
@@ -227,8 +242,12 @@ class ProfileQuerySet(PublishedQuerySetMixin):
     def current(self):
         '''Return profiles for users with a current position or current grant
         based on start and end dates.'''
+        # annotate with an is_current flag to make template logic simpler
         return self.filter(models.Q(self._current_position_query()) |
-                           models.Q(self._current_grant_query()))
+                           models.Q(self._current_grant_query())) \
+                   .extra(select={'is_current': True})
+        # NOTE: couldn't get annotate to work
+        # .annotate(is_current=models.Value(True, output_field=models.BooleanField))
 
     def current_grant(self):
         '''Return profiles for users with a current grant.'''
