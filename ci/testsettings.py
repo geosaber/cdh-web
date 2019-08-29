@@ -13,7 +13,7 @@ DEBUG = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cdhweb.db',
+        'NAME': 'cdhweb',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': '127.0.0.1',
@@ -37,4 +37,3 @@ COMPRESS_ROOT = os.path.join(BASE_DIR, 'sitemedia')
 
 # run a full compress before e2e/a11y tests to serve statically
 COMPRESS_OFFLINE = True
-
