@@ -22,7 +22,7 @@ install:
 before_script:
 - sudo chown root /opt/google/chrome/chrome-sandbox
 - sudo chmod 4755 /opt/google/chrome/chrome-sandbox
-- mysql -u root -e "create database test";  # load and run site for pa11y to check
+- mysql -u root -e "create database cdhweb";  # load and run site for pa11y to check
 - mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root mysql
 - python manage.py migrate
 - python manage.py loaddata pa11y_test_site
