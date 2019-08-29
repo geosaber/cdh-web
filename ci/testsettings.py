@@ -11,10 +11,18 @@ import os
 DEBUG = True
 
 DATABASES = {
-    "default": {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'cdhweb.db'
-    }
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'cdhweb.db',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'read_default_file': '~travis/.my.cnf'
+        },
+    },
 }
 
 # required with django 1.11 when debug is false, even for tests
