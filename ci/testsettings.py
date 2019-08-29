@@ -8,7 +8,7 @@ import os
 # immediately.
 
 # NOTE: setting debug = true to avoid pa11y-ci timeouts
-DEBUG = True
+DEBUG = False
 
 DATABASES = {
     'default': {
