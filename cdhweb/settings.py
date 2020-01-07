@@ -352,6 +352,7 @@ INSTALLED_APPS = [
     # mezzanine.blog; there are good and bad aspects to this; we certainly
     # don't want users to create the wrong kind of blog posts.
     "cdhweb.blog",
+    'cdhweb.pages',
 ]
 
 # List of middleware classes to use. Order is important; in the request phase,
