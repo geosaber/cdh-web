@@ -1,0 +1,74 @@
+[
+    {
+        "model": "wagtailcore.page",
+        "pk": 3,
+        "fields": {
+            "path": "00010001",
+            "depth": 2,
+            "numchild": 1,
+            "title": "Home",
+            "draft_title": "Home",
+            "slug": "home",
+            "content_type": ["cdhpages", "homepage"],
+            "live": true,
+            "has_unpublished_changes": false,
+            "url_path": "/home/",
+            "owner": null,
+            "seo_title": "",
+            "show_in_menus": true,
+            "search_description": "",
+            "go_live_at": null,
+            "expire_at": null,
+            "expired": false,
+            "locked": false,
+            "first_published_at": null,
+            "last_published_at": null,
+            "latest_revision_created_at": null,
+            "live_revision": null
+        }
+    },
+    {
+        "model": "wagtailcore.page",
+        "pk": 4,
+        "fields": {
+            "path": "000100010001",
+            "depth": 3,
+            "numchild": 0,
+            "title": "Research",
+            "draft_title": "Research",
+            "slug": "research",
+            "content_type": ["cdhpages", "landingpage"],
+            "live": true,
+            "has_unpublished_changes": false,
+            "url_path": "/home/research",
+            "owner": null,
+            "seo_title": "",
+            "show_in_menus": true,
+            "search_description": "",
+            "go_live_at": null,
+            "expire_at": null,
+            "expired": false,
+            "locked": false,
+            "first_published_at": null,
+            "last_published_at": null,
+            "latest_revision_created_at": null,
+            "live_revision": null
+        }
+    },
+    {
+        "model": "cdhpages.homepage",
+        "pk": 3,
+        "fields": {
+            "body": "[]"
+        }
+    },
+    {
+        "model": "cdhpages.landingpage",
+        "pk": 4,
+        "fields": {
+            "tagline": "Establishing best practices in technical research and design",
+            "body": "[]",
+            "header_image": null
+        }
+    }
+]
