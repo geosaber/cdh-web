@@ -3,9 +3,11 @@ from __future__ import unicode_literals
 
 from django.db import migrations
 
-# add_child utility method taken from:
+# add_child utility method adapted from:
 # http://www.agilosoftware.com/blog/django-treebard-and-wagtail-page-creation/
 def add_child(apps, parent_page, klass, **kwargs):
+    '''Create a new draft wagtail page of type klass as a child of page instance
+    parent_page, passing along kwargs to its create() function.'''
 
     ContentType = apps.get_model('contenttypes.ContentType')
 
@@ -14,14 +16,12 @@ def add_child(apps, parent_page, klass, **kwargs):
         app_label=klass._meta.app_label,
     )[0]
 
-    url_path = '%s%s/' % (parent_page.url_path, kwargs.get('slug'))
-
     created_page = klass.objects.create(
         content_type=page_content_type,
         path='%s00%02d' % (parent_page.path, parent_page.numchild + 1),
         depth=parent_page.depth + 1,
         numchild=0,
-        url_path=url_path,
+        live=False, # create as a draft so that URL is set correctly on publish
         **kwargs
     )
 
@@ -31,39 +31,41 @@ def add_child(apps, parent_page, klass, **kwargs):
     return created_page
 
 def create_homepage(apps, schema_editor):
-    '''Search for an existing mezzanine Page for the home page, if any, and save
-    its content. Create a new wagtail HomePage using this content and set the
-    site's root to the new homepage. Delete the default wagtail welcome page,
-    if it exists.'''
+    '''Create a new wagtail HomePage with any existing content from an old
+    Mezzanine home page, and delete Wagtail's default welcome page.'''
 
-    # MezzaninePage = apps.get_model('mezzanine.pages', 'Page')
+    RichTextPage = apps.get_model('pages', 'RichTextPage')
     Page = apps.get_model('wagtailcore', 'Page')
     HomePage = apps.get_model('cdhweb.pages', 'HomePage')
 
-    # try:
-    #     old_home = Page.objects.get(title='Home')
-    #     content = old_home.richtextpage.content
-    # except (Page.DoesNotExist, AttributeError):
-    #     content = ''
+    # check for an existing mezzanine 'home' page and save its content
+    old_home = RichTextPage.objects.filter(title='Home')
+    if old_home.count() == 1:
+        content = old_home.first().content
 
+    # create the new homepage underneath site root and publish it
     root = Page.objects.get(title='Root')
-    new_home = add_child(apps, root, HomePage, title='Home')
-    # new_home.save_revision().publish() # create a new revision and publish
+    add_child(apps, root, HomePage, title='Home')
+    # new_home.save_revision().publish()
 
+    # delete the default welcome page
     welcome = Page.objects.get(title='Welcome to your new Wagtail site!')
-    welcome.delete() # delete welcome page
+    welcome.delete()
 
 
 def revert_create_homepage(apps, schema_editor):
     '''Delete the created wagtail HomePage and replace with a placeholder
     welcome page.'''
+    # NOTE this does not restore deleted mezzanine page!
 
     Page = apps.get_model('wagtailcore', 'Page')
     HomePage = apps.get_model('cdhweb.pages', 'HomePage')
     
+    # create a welcome page, since at least one child of root is required
     root = Page.objects.get(title='Root')
     add_child(apps, root, Page, title='Welcome to your new Wagtail site!')
 
+    # delete the created HomePage
     HomePage.objects.first().delete()
 
 
@@ -74,5 +76,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(create_homepage, reverse_code=revert_create_homepage)
+        migrations.RunPython(create_homepage,
+                             reverse_code=revert_create_homepage)
     ]
