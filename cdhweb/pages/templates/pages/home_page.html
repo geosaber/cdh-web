@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags %}
+
+{% block page-title %}{% if page %}{{ page.meta_title }}{% else %}The Center for Digital Humanities at Princeton{% endif %}{% endblock %}
+
+{% block content %} {# add a class to main content for home-page specific styles #}
+<div class="homepage{% if updates %} with-carousel{% endif %}">
+{% if updates %}
+{% include 'snippets/carousel.html' %}
+{% endif %}
+{{ block.super }}
+</div>
+{% endblock %}
+
+{% block bodyattrs %}class="with-cards"{% endblock %}
+
+{% block main %}
+
+{# display editable page content; wrapped for formatting reasons #}
+<section>
+    <div class="richtext">
+    {% for block in page.body %}
+        {% include_block block %}
+    {% endfor %}
+    </div>
+</section>
+
+<section class="events">
+<h2><a href="{% url 'event:upcoming' %}">Upcoming Events</a></h2>
+{% for event in events %}
+    {% include 'events/snippets/event_card.html' %}
+{% empty %}
+    <div>
+    <p>Next semester's events are being scheduled.
+        Check back later or view <a href="{% url 'event:upcoming' %}">past events</a>.</p>
+    </div>
+{% endfor %}
+</section>
+
+<section class="projects">
+<h2><a href="{% url 'project:list' %}">Projects</a></h2>
+{% for project in projects %}
+    {% include 'projects/snippets/project_card.html' %}
+    {# project tile still todo #}
+{% endfor %}
+</section>
+
+
+{% endblock %}
