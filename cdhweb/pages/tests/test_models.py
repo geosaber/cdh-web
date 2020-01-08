@@ -32,9 +32,18 @@ class TestHomePage(WagtailPageTests):
 
 
 class TestLandingPage(WagtailPageTests):
+    fixtures = ['sample_pages']
     
     def test_can_create(self):
-        pass
+        home = HomePage.objects.get(title='Home')
+        self.assertCanCreate(home, LandingPage, nested_form_data({
+            'title': 'Engage',
+            'slug': 'engage',
+            'tagline': 'Consult, collaborate, and work with us',
+            'body': streamfield([
+                ('paragraph', rich_text('engage page text')),
+            ]),
+        }))
 
     def test_parent_pages(self):
         # only allowed parent is home
@@ -49,9 +58,17 @@ class TestLandingPage(WagtailPageTests):
 
 
 class TestContentPage(WagtailPageTests):
-    
+    fixtures = ['sample_pages']
+
     def test_can_create(self):
-        pass
+        research = LandingPage.objects.get(title='Research')
+        self.assertCanCreate(research, ContentPage, nested_form_data({
+            'title': 'Data Curation',
+            'slug': 'data-curation',
+            'body': streamfield([
+                ('paragraph', rich_text('data curation page text')),
+            ]),
+        }))
 
     def test_parent_pages(self):
         # can be child of home, landing page, or another content page
