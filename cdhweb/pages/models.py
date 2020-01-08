@@ -18,12 +18,14 @@ from cdhweb.blog.models import BlogPost
 from cdhweb.events.models import Event
 from cdhweb.projects.models import Project
 
+
 #: commonly allowed tags for RichTextBlocks
 RICH_TEXT_TAGS = ['h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'blockquote']
 
-#: help text for image alternative text
-ALT_TEXT_HELP = """Alternative text for visually impaired users to
-briefly communicate the intended message of the image in this context."""
+class BodyContentBlock(StreamBlock):
+    '''Common set of blocks available in StreamFields for body text.'''
+    paragraph = RichTextBlock(features=RICH_TEXT_TAGS)
+    image = ImageChooserBlock()
 
 
 class PagePreviewDescriptionMixin(models.Model):
@@ -56,7 +58,7 @@ class PagePreviewDescriptionMixin(models.Model):
         description = ''
 
         # use description field if set
-        # use striptags to check for empty paragraph)
+        # use striptags to check for empty paragraph
         if striptags(self.description):
             description = self.description
 
@@ -87,62 +89,31 @@ class PagePreviewDescriptionMixin(models.Model):
         return striptags(self.get_description())
 
 
-class LinkableSectionBlock(StructBlock):
-    ''':class:`~wagtail.core.blocks.StructBlock` for a rich text block and an
-    associated `title` that will render as an <h2>. Creates an anchor (<a>)
-    so that the section can be directly linked to using a url fragment.'''
-    title = CharBlock()
-    anchor_text = CharBlock(help_text='Short label for anchor link')
-    body = RichTextBlock(features=RICH_TEXT_TAGS)
-    panels = [
-        FieldPanel('title'),
-        FieldPanel('slug'),
-        FieldPanel('body'),
-    ]
-
-    class Meta:
-        icon = 'form'
-        label = 'Linkable Section'
-        template = 'pages/snippets/linkable_section.html'
-
-    def clean(self, value):
-        cleaned_values = super().clean(value)
-        # run slugify to ensure anchor text is a slug
-        cleaned_values['anchor_text'] = slugify(cleaned_values['anchor_text'])
-        return cleaned_values
-
-
-class CaptionedImageBlock(StructBlock):
-    ''':class:`~wagtail.core.blocks.StructBlock` for an image with
-    alternative text and optional formatted caption, so
-    that both caption and alternative text can be context-specific.'''
-    image = ImageChooserBlock()
-    alternative_text = TextBlock(required=True, help_text=ALT_TEXT_HELP)
-    caption = RichTextBlock(features=['bold', 'italic', 'link'], required=False)
-
-    class Meta:
-        icon = 'image'
-
-
-class BodyContentBlock(StreamBlock):
-    '''Common set of blocks available in StreamFields for body text.'''
-    paragraph = RichTextBlock(features=RICH_TEXT_TAGS)
-    image = CaptionedImageBlock()
-    linkable_section = LinkableSectionBlock()
-
-
 class ContentPage(Page, PagePreviewDescriptionMixin):
     '''Basic content page model.'''
 
-    parent_page_types = ['ContentPage']
+    #: main page text
+    body = StreamField(BodyContentBlock, blank=True)
+
+    # TODO attachments
+
+    content_panels = Page.content_panels + [
+        FieldPanel('description'),
+        StreamFieldPanel('body'),
+    ]
+
+    parent_page_types = ['HomePage', 'LandingPage', 'ContentPage']
     subpage_types = ['ContentPage']
 
 
 class LandingPage(Page):
     '''Page type that aggregates and displays multiple :class:`ContentPage`s.'''
 
-    tagline = models.CharField(max_length=255)
+    #: main page text
     body = StreamField(BodyContentBlock, blank=True)
+    #: short sentence overlaid on the header image
+    tagline = models.CharField(max_length=255)
+    #: image that will be used for the header
     header_image = models.ForeignKey('wagtailimages.image', null=True,
         blank=True, on_delete=models.SET_NULL, related_name='+') # no reverse relationship
 
@@ -160,13 +131,20 @@ class LandingPage(Page):
 class HomePage(Page):
     '''A home page that aggregates and displays featured content.'''
 
+    #: main page text
     body = StreamField(BodyContentBlock, blank=True)
+
+    search_fields = Page.search_fields + [index.SearchField('body')]
+    content_panels = Page.content_panels + [StreamFieldPanel('body')]
+
+    parent_page_types = [Page] # only root
+    subpage_types = ['LandingPage', 'ContentPage']
 
     class Meta:
         verbose_name = 'Homepage'
 
     def get_context(self, request):
-        '''Add featured content to the page context.'''
+        '''Add featured updates, projects, and events to the page context.'''
         context = super().get_context(request)
 
         # add up to 6 featured updates, otherwise use 3 most recent updates
@@ -184,9 +162,3 @@ class HomePage(Page):
         context['events'] = Event.objects.published().upcoming()[:3]
 
         return context
-
-    search_fields = Page.search_fields + [index.SearchField('body')]
-    content_panels = Page.content_panels + [StreamFieldPanel('body')]
-
-    parent_page_types = [Page] # only root
-    subpage_types = ['LandingPage', 'ContentPage']
