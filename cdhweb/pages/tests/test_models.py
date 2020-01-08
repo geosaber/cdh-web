@@ -4,37 +4,7 @@ from wagtail.tests.utils import WagtailPageTests
 from wagtail.tests.utils.form_data import (nested_form_data, rich_text,
                                            streamfield)
 
-from cdhweb.pages.models import (ContentPage, HomePage, LandingPage,
-                                 LinkableSectionBlock)
-
-
-class TestLinkableSectionBlock(SimpleTestCase):
-
-    def test_clean(self):
-        block = LinkableSectionBlock()
-        cleaned_values = block.clean({'anchor_text': 'Working at the CDH'})
-        assert cleaned_values['anchor_text'] == 'working-at-the-cdh'
-
-    def test_render(self):
-        block = LinkableSectionBlock()
-        html = block.render(block.to_python({
-            'title': 'Working at the CDH',
-            'body': 'Info about how to get a job working at the CDH',
-            'anchor_text': 'working-at-the-cdh',
-        }))
-        expected_html = '''
-            <div id="working-at-the-cdh">
-            <h2>Working at the CDH
-            <a class="headerlink" href="#working-at-the-cdh"
-               title="Permalink to this section">¶</a>
-            </h2>
-            <div class="rich-text">
-                Info about how to get a job working at the CDH
-            </div>
-            </div>
-        '''
-
-        self.assertHTMLEqual(html, expected_html)
+from cdhweb.pages.models import ContentPage, HomePage, LandingPage
 
 
 class TestHomePage(WagtailPageTests):
