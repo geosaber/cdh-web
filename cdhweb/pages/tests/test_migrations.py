@@ -5,18 +5,18 @@ from cdhweb.pages.migration_utilities import TestMigrations, get_parent
 
 class TestCreateHomepage(TestMigrations):
 
-    app = 'cdhweb.pages'
+    app = 'cdhpages'
     migrate_from = '0001_initial'
     migrate_to = '0002_homepage'
 
     def test_new_homepage(self):
         # should create one new HomePage
-        HomePage = self.apps.get_model('cdhweb.pages', 'HomePage')
+        HomePage = self.apps.get_model('cdhpages', 'HomePage')
         self.assertEqual(HomePage.objects.count(), 1)
 
     def test_homepage_at_root(self):
         # new HomePage should be located at root
-        HomePage = self.apps.get_model('cdhweb.pages', 'HomePage')
+        HomePage = self.apps.get_model('cdhpages', 'HomePage')
         home = HomePage.objects.first()
         parent = get_parent(apps, home)
         self.assertEqual(parent.title, 'Root')
@@ -27,10 +27,19 @@ class TestCreateHomepage(TestMigrations):
         with self.assertRaises(Page.DoesNotExist):
             Page.objects.get(title='Welcome to your new Wagtail site!')
 
+    def test_site_root_page(self):
+        # default site should point to new home page
+        Site = apps.get_model('wagtailcore', 'Site')
+        HomePage = self.apps.get_model('cdhpages', 'HomePage')
+        home = HomePage.objects.first()
+        site = Site.objects.first()
+        self.assertEqual(site.root_page, home)
+        self.assertEqual(site.root_page_id, home.id)
+
 
 class TestMigrateHomepage(TestMigrations):
 
-    app = 'cdhweb.pages'
+    app = 'cdhpages'
     migrate_from = '0001_initial'
     migrate_to = '0002_homepage'
 
@@ -40,14 +49,4 @@ class TestMigrateHomepage(TestMigrations):
 
     def test_migrate_homepage(self):
         # new HomePage should have migrated mezzanine content
-        pass
-
-
-class TestCreateSite(TestMigrations):
-
-    app = 'cdhweb.pages'
-    migrate_from = '0001_initial'
-    migrate_to = '0002_homepage'
-
-    def test_create_site(self):
         pass
