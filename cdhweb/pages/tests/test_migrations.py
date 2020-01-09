@@ -1,6 +1,6 @@
 from django.apps import apps
 
-from cdhweb.pages.migration_utilities import TestMigrations, get_parent
+from cdhweb.pages.migration_utils import TestMigrations, get_parent
 
 
 class TestCreateHomepage(TestMigrations):

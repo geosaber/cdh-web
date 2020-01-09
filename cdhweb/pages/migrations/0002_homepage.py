@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-from cdhweb.pages.migration_utilities import add_child
+from cdhweb.pages.migration_utils import add_child
 
 
 def create_homepage(apps, schema_editor):
