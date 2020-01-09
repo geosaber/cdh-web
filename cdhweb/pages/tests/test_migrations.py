@@ -33,7 +33,6 @@ class TestCreateHomepage(TestMigrations):
         HomePage = self.apps.get_model('cdhpages', 'HomePage')
         home = HomePage.objects.first()
         site = Site.objects.first()
-        self.assertEqual(site.root_page, home)
         self.assertEqual(site.root_page_id, home.id)
 
 
