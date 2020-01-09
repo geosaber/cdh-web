@@ -46,7 +46,7 @@ class PagePreviewDescriptionMixin(models.Model):
     # (tags are omitted by subsetting default ALLOWED_TAGS)
     #: allowed tags for bleach html stripping in description
     allowed_tags = list((set(bleach.sanitizer.ALLOWED_TAGS) - \
-        set(['a', 'blockquote']))) # additional tags to remove
+        set(['a', 'blockquote'])))  # additional tags to remove
 
     class Meta:
         abstract = True
@@ -115,7 +115,7 @@ class LandingPage(Page):
     tagline = models.CharField(max_length=255)
     #: image that will be used for the header
     header_image = models.ForeignKey('wagtailimages.image', null=True,
-        blank=True, on_delete=models.SET_NULL, related_name='+') # no reverse relationship
+        blank=True, on_delete=models.SET_NULL, related_name='+')  # no reverse relationship
 
     search_fields = Page.search_fields + [index.SearchField('body')]
     content_panels = Page.content_panels + [
@@ -137,7 +137,7 @@ class HomePage(Page):
     search_fields = Page.search_fields + [index.SearchField('body')]
     content_panels = Page.content_panels + [StreamFieldPanel('body')]
 
-    parent_page_types = [Page] # only root
+    parent_page_types = [Page]  # only root
     subpage_types = ['LandingPage', 'ContentPage']
 
     class Meta:

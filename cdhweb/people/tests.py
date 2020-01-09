@@ -521,8 +521,8 @@ class TestViews(TestCase):
         bill = Person.objects.get(username='billshakes')
         workshop = EventType.objects.get(name='Workshop')
         # use django timezone util for timezone-aware datetime
-        start_time = timezone.now() + timedelta(days=1) # starts tomorrow
-        end_time = start_time + timedelta(hours=2) # lasts 2 hours
+        start_time = timezone.now() + timedelta(days=1)  # starts tomorrow
+        end_time = start_time + timedelta(hours=2)  # lasts 2 hours
         bill_workshop = Event.objects.create(start_time=start_time,
                                              end_time=end_time,
                                              event_type=workshop,
@@ -532,8 +532,8 @@ class TestViews(TestCase):
         # create another event to test ordering
         rms = Person.objects.get(username='rms')
         lecture = EventType.objects.get(name='Guest Lecture')
-        start_time = timezone.now() + timedelta(weeks=1) # starts in a week
-        end_time = start_time + timedelta(hours=1) # lasts 1 hour
+        start_time = timezone.now() + timedelta(weeks=1)  # starts in a week
+        end_time = start_time + timedelta(hours=1)  # lasts 1 hour
         rms_lecture = Event.objects.create(start_time=start_time,
                                            end_time=end_time,
                                            event_type=lecture,
@@ -576,9 +576,9 @@ class TestViews(TestCase):
         assert response.context['current'][1] == rms.profile
 
         # move an event to the past
-        new_start = timezone.now() - timedelta(weeks=52) # ~1 year ago
+        new_start = timezone.now() - timedelta(weeks=52)  # ~1 year ago
         bill_workshop.start_time = new_start
-        bill_workshop.end_time = new_start + timedelta(hours=2) # 2 hours long
+        bill_workshop.end_time = new_start + timedelta(hours=2)  # 2 hours long
         bill_workshop.save()
 
         # should be one profile in each category
@@ -590,9 +590,9 @@ class TestViews(TestCase):
         self.assertContains(response, bill_workshop.start_time.strftime('%Y'))
 
         # move both events to past to test ordering
-        new_start = timezone.now() - timedelta(weeks=104) # ~2 years ago
+        new_start = timezone.now() - timedelta(weeks=104)  # ~2 years ago
         rms_lecture.start_time = new_start
-        rms_lecture.end_time = new_start + timedelta(hours=2) # 2 hours long
+        rms_lecture.end_time = new_start + timedelta(hours=2)  # 2 hours long
         rms_lecture.save()
 
         # speakers should be sorted with latest event year first
@@ -655,12 +655,12 @@ class TestViews(TestCase):
         staffer2 = Person.objects.get(username='staff2')
         solo_post = staffer.blogposts.last()
         coauth_post = staffer2.blogposts.first()
-        self.assertContains(response, solo_post.title) # show both blog posts
+        self.assertContains(response, solo_post.title)  # show both blog posts
         self.assertContains(response, solo_post.title)
-        self.assertContains(response, staffer2.profile.title) # indicate that one post has another author
+        self.assertContains(response, staffer2.profile.title)  # indicate that one post has another author
 
         response = self.client.get(staffer2.get_absolute_url())
-        self.assertNotContains(response, solo_post.title) # only posts from this author
+        self.assertNotContains(response, solo_post.title)  # only posts from this author
         self.assertContains(response, coauth_post.title)
         self.assertContains(response, staffer.profile.title)
 

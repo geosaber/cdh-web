@@ -22,7 +22,7 @@ class EventMixinView(object):
     def get_queryset(self):
         '''use displayable manager to find published events only'''
         # (or draft profiles for logged in users with permission to view)
-        return Event.objects.published() # TODO: published(for_user=self.request.user)
+        return Event.objects.published()  # TODO: published(for_user=self.request.user)
 
 
 class EventSemesterDates(object):

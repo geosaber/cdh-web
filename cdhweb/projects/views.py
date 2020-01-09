@@ -15,7 +15,7 @@ class ProjectMixinView(object):
     def get_queryset(self):
         # use displayable manager to find published events only
         # (or draft profiles for logged in users with permission to view)
-        return Project.objects.published() # TODO: published(for_user=self.request.user)
+        return Project.objects.published()  # TODO: published(for_user=self.request.user)
 
 
 class ProjectListMixinView(ProjectMixinView, ListView, LastModifiedListMixin):

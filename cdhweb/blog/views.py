@@ -19,7 +19,7 @@ class BlogPostMixinView(object):
     def get_queryset(self):
         # use displayable manager to find published events only
         # (or draft profiles for logged in users with permission to view)
-        return BlogPost.objects.published() # TODO: published(for_user=self.request.user)
+        return BlogPost.objects.published()  # TODO: published(for_user=self.request.user)
 
 
 class BlogPostArchiveMixin(BlogPostMixinView, LastModifiedListMixin):
