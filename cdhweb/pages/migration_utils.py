@@ -63,25 +63,50 @@ def add_child(apps, parent_page, klass, **kwargs):
 
     return page
 
-# adapted from `copy_page_data_to_content_streamfield`:
-# https://www.caktusgroup.com/blog/2019/09/12/wagtail-data-migrations/
-def html_to_streamfield(html):
-    # create and save a new RichTextBlock with the html content
-    # generate JSON referencing the block to store as a page's streamfield
-    return [
-        {'type': 'body', 'value': [
 
-        ]}
-    ]
+def page_to_dict(page):
+    return {
+        'pk': page.pk,
+        'live': page.live,
+        'slug': page.slug,
+        'path': page.path,
+        'title': page.title,
+        'depth': page.depth,
+        'owner': page.owner,
+        'locked': page.locked,
+        'expired': page.expired,
+        'numchild': page.numchild,
+        'url_path': page.url_path,
+        'expire_at': page.expire_at,
+        'seo_title': page.seo_title,
+        'go_live_at': page.go_live_at,
+        'draft_title': page.draft_title,
+        'content_type': page.content_type,
+        'show_in_menus': page.show_in_menus,
+        'live_revision': page.live_revision,
+        'last_published_at': page.last_published_at,
+        'search_description': page.search_description,
+        'first_published_at': page.first_published_at,
+        'has_unpublished_changes': page.has_unpublished_changes,
+        'latest_revision_created_at': page.latest_revision_created_at,
+    }
 
 # adapted from wagtail's `save_revision`:
 # https://github.com/wagtail/wagtail/blob/stable/2.3.x/wagtail/core/models.py#L631
-def create_revision(apps, page, content=[], user=None, created_at=datetime.now()):
+def create_revision(apps, page, user=None, created_at=datetime.now(), **kwargs):
     '''Add a :class:`wagtail.core.models.PageRevision` to document changes to a
     Page associated with a particular user and timestamp.'''
 
     PageRevision = apps.get_model('wagtailcore', 'PageRevision')
-    page.full_clean()
+
+    # serialize the page's current state and apply changes from kwargs
+    content = page_to_dict(page)
+    for (key, value) in kwargs.items():
+        try:
+            page[key] = value 
+            content[key] = value
+        except (KeyError, AttributeError):
+            continue
 
     # create the revision object
     revision = PageRevision.create(

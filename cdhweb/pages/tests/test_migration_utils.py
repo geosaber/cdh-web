@@ -1,9 +1,9 @@
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
-from wagtail.core.models import Page
+from wagtail.core.models import Page, PageRevision
 
-from cdhweb.pages.migration_utils import add_child, get_parent
+from cdhweb.pages.migration_utils import add_child, get_parent, create_revision
 from cdhweb.pages.models import ContentPage, HomePage
 
 
@@ -38,14 +38,14 @@ class TestAddChild(TestCase):
         add_child(apps, root, HomePage, title='New Home')
         new_home = HomePage.objects.get(title='New Home')
 
-        self.assertEqual(HomePage.objects.count(), 2) # added second homepage
-        self.assertEqual(new_home.content_type, home_type) # correct type
-        self.assertEqual(new_home.live, False) # is draft
-        self.assertEqual(new_home.numchild, 0) # no children yet
-        self.assertEqual(new_home.path, '00010002') # correct path
-        self.assertEqual(new_home.title, 'New Home') # passed kwarg
-        self.assertEqual(new_home.get_parent(), root) # correct parent
-        self.assertEqual(root.numchild, 2) # root has 2 children
+        self.assertEqual(HomePage.objects.count(), 2)  # added second homepage
+        self.assertEqual(new_home.content_type, home_type)  # correct type
+        self.assertEqual(new_home.live, False)  # is draft
+        self.assertEqual(new_home.numchild, 0)  # no children yet
+        self.assertEqual(new_home.path, '00010002')  # correct path
+        self.assertEqual(new_home.title, 'New Home')  # passed kwarg
+        self.assertEqual(new_home.get_parent(), root)  # correct parent
+        self.assertEqual(root.numchild, 2)  # root has 2 children
 
     def test_add_nested(self):
         # should add nested with correct props and update parent child count
@@ -54,13 +54,45 @@ class TestAddChild(TestCase):
         add_child(apps, research, ContentPage, title='CDH Software')
         software = ContentPage.objects.get(title='CDH Software')
 
-        self.assertEqual(software.content_type, cp_type) # correct type
-        self.assertEqual(software.live, False) # is draft
-        self.assertEqual(software.numchild, 0) # no children yet
-        self.assertEqual(software.path, '0001000100010001') # correct path
-        self.assertEqual(software.title, 'CDH Software') # passed kwarg
-        self.assertEqual(software.get_parent(), research) # correct parent
-        self.assertEqual(research.numchild, 1) # parent has 1 child
+        self.assertEqual(software.content_type, cp_type)  # correct type
+        self.assertEqual(software.live, False)  # is draft
+        self.assertEqual(software.numchild, 0)  # no children yet
+        self.assertEqual(software.path, '0001000100010001')  # correct path
+        self.assertEqual(software.title, 'CDH Software')  # passed kwarg
+        self.assertEqual(software.get_parent(), research)  # correct parent
+        self.assertEqual(research.numchild, 1)  # parent has 1 child
 
     def test_with_kwargs(self):
+        pass
+
+
+def TestCreateRevision(TestCase):
+    fixtures = ['sample_pages']
+
+    def test_create(self):
+        # create an empty revision of the homepage
+        home = Page.objects.get(title='Home')
+        revision = create_revision(apps, home)
+        self.assertEqual(home.revisions.count(), 1) # now has 1 revision
+
+    def test_update_page(self):
+        # check that the page associated with the revision is updated
+        home = Page.objects.get(title='Home')
+        revision = create_revision(apps, home)
+        self.assertEqual(home.latest_revision_created_at, revision.created_at)
+        self.assertTrue(home.has_unpublished_changes)
+
+    def test_content(self):
+        # check that the provided content is included in the revision
+        home = Page.objects.get(title='Home')
+        revision = create_revision(apps, home, content=[])
+        pass
+
+    def test_user(self):
+        pass
+
+    def test_timestamp(self):
+        pass
+
+    def test_logging(self):
         pass
