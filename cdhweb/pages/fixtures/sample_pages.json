@@ -98,5 +98,15 @@
             "body": "[]",
             "header_image": null
         }
+    },
+    {
+        "model": "wagtailcore.site",
+        "fields": {
+            "hostname": "localhost",
+            "port": 8000,
+            "site_name": "test",
+            "root_page": 2,
+            "is_default_site": true
+        }
     }
 ]
