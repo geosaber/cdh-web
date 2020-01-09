@@ -1,13 +1,19 @@
-from django.test import TestCase
-from django.db.migrations.executor import MigrationExecutor
-from django.db import connection
+import json
+import logging
+from datetime import datetime
 
+from django.db import connection
+from django.db.migrations.executor import MigrationExecutor
+from django.test import TestCase
+
+logger = logging.getLogger('wagtail.core')
 
 # see for an explanation of django-treebeard & the `path` attribute:
 # http://www.agilosoftware.com/blog/django-treebard-and-wagtail-page-creation/
 def get_parent(apps, page):
     '''Find the parent of a wagtail page instance. Always returns the underlying
     :class:`wagtail.core.models.Page` rather than a subclass.'''
+
     # if the path is 4 digits, we're at the root, so there is no parent
     if len(page.path) == 4:
         return None
@@ -18,6 +24,8 @@ def get_parent(apps, page):
 
 # add_child utility method adapted from:
 # http://www.agilosoftware.com/blog/django-treebard-and-wagtail-page-creation/
+# see also:
+# https://github.com/wagtail/wagtail/blob/stable/2.3.x/wagtail/core/models.py#L442
 def add_child(apps, parent_page, klass, **kwargs):
     '''Create a new draft wagtail page of type klass as a child of page instance
     parent_page, passing along kwargs to its create() function.'''
@@ -30,12 +38,12 @@ def add_child(apps, parent_page, klass, **kwargs):
     )[0]
 
     # create the new page
-    created_page = klass.objects.create(
+    page = klass.objects.create(
         content_type=page_content_type,
         path='%s%04d' % (parent_page.path, parent_page.numchild + 1),
         depth=parent_page.depth + 1,
         numchild=0,
-        live=False, # create as a draft so that URL is set correctly on publish
+        live=False,  # create as a draft so that URL is set correctly on publish
         **kwargs
     )
 
@@ -43,7 +51,17 @@ def add_child(apps, parent_page, klass, **kwargs):
     parent_page.numchild += 1
     parent_page.save()
 
-    return created_page
+    # log the creation and return the page
+    logger.info(
+        "Page created: \"%s\" id=%d content_type=%s.%s path=%s",
+        page.title,
+        page.id,
+        klass._meta.app_label,
+        klass.__name__,
+        page.url_path
+    )
+
+    return page
 
 # adapted from `copy_page_data_to_content_streamfield`:
 # https://www.caktusgroup.com/blog/2019/09/12/wagtail-data-migrations/
@@ -56,22 +74,34 @@ def html_to_streamfield(html):
         ]}
     ]
 
-# adapted from `copy_page_data_to_content_streamfield`:
-# https://www.caktusgroup.com/blog/2019/09/12/wagtail-data-migrations/
-def create_revision(page, content):
+# adapted from wagtail's `save_revision`:
+# https://github.com/wagtail/wagtail/blob/stable/2.3.x/wagtail/core/models.py#L631
+def create_revision(apps, page, content=[], user=None, created_at=datetime.now()):
+    '''Add a :class:`wagtail.core.models.PageRevision` to document changes to a
+    Page associated with a particular user and timestamp.'''
+
+    PageRevision = apps.get_model('wagtailcore', 'PageRevision')
+    page.full_clean()
+
     # create the revision object
-    revision = {
-        'fields': {
-            'approved_go_live_at': None, # needs to become json null
-            # 'content_json': json.dumps(content),
-            # 'created_at': date, # current timestamp, or pass in?
-            'page': page.id,
-            'submitted_for_moderation': False,
-            # 'user': admin # get admin user or pass in?
-        }
-    }
-    # add the new revision to the page and return it
-    return page
+    revision = PageRevision.create(
+        content_json=json.dumps(content),
+        user=user,
+        submitted_for_moderation=False,
+        approved_go_live_at=None,
+        created_at=created_at
+    )
+
+    # update and save the page
+    page.latest_revision_created_at = created_at
+    page.draft_title = page.title
+    page.has_unpublished_changes = True
+
+    # log the revision and return it
+    logger.info("Page edited: \"%s\" id=%d revision_id=%d", page.title,
+                page.id, revision.id)
+
+    return revision
 
 # adapted from `TestMigrations`
 # https://www.caktusgroup.com/blog/2016/02/02/writing-unit-tests-django-migrations/
