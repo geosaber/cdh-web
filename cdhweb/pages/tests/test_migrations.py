@@ -1,6 +1,7 @@
 from django.apps import apps
 
 from cdhweb.pages.migration_utils import TestMigrations, get_parent
+from mezzanine.pages.models import RichTextPage
 
 
 class TestCreateHomepage(TestMigrations):
@@ -44,8 +45,20 @@ class TestMigrateHomepage(TestMigrations):
 
     def setUpBeforeMigration(self, apps):
         # create a mezzanine home page with content
-        pass
+        content = """
+        <p>The Center for Digital Humanities is a DH research center.</p>
+        """
+        # RichTextPage = apps.get_model('pages', 'RichTextPage')
+        RichTextPage.objects.create(title='Home', content=content)
+
+    def test_delete_mezzanine_home(self):
+        # mezzanine page should be deleted
+        RichTextPage = apps.get_model('pages', 'RichTextPage')
+        with self.assertRaises(RichTextPage.DoesNotExist):
+            old_home = RichTextPage.objects.get(title='Home')
 
     def test_migrate_homepage(self):
         # new HomePage should have migrated mezzanine content
-        pass
+        HomePage = self.apps.get_model('cdhpages', 'HomePage')
+        self.assertEqual(HomePage.body, 'The Center for Digital Humanities is \
+            a DH research center.')

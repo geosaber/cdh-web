@@ -2,6 +2,7 @@ import json
 import logging
 from datetime import datetime
 
+from django.core.serializers import serialize
 from django.db import connection
 from django.db.migrations.executor import MigrationExecutor
 from django.test import TestCase
@@ -63,64 +64,36 @@ def add_child(apps, parent_page, klass, **kwargs):
 
     return page
 
-
-def page_to_dict(page):
-    return {
-        'pk': page.pk,
-        'live': page.live,
-        'slug': page.slug,
-        'path': page.path,
-        'title': page.title,
-        'depth': page.depth,
-        'owner': page.owner,
-        'locked': page.locked,
-        'expired': page.expired,
-        'numchild': page.numchild,
-        'url_path': page.url_path,
-        'expire_at': page.expire_at,
-        'seo_title': page.seo_title,
-        'go_live_at': page.go_live_at,
-        'draft_title': page.draft_title,
-        'content_type': page.content_type,
-        'show_in_menus': page.show_in_menus,
-        'live_revision': page.live_revision,
-        'last_published_at': page.last_published_at,
-        'search_description': page.search_description,
-        'first_published_at': page.first_published_at,
-        'has_unpublished_changes': page.has_unpublished_changes,
-        'latest_revision_created_at': page.latest_revision_created_at,
-    }
-
 # adapted from wagtail's `save_revision`:
 # https://github.com/wagtail/wagtail/blob/stable/2.3.x/wagtail/core/models.py#L631
 def create_revision(apps, page, user=None, created_at=datetime.now(), **kwargs):
     '''Add a :class:`wagtail.core.models.PageRevision` to document changes to a
     Page associated with a particular user and timestamp.'''
 
-    PageRevision = apps.get_model('wagtailcore', 'PageRevision')
-
-    # serialize the page's current state and apply changes from kwargs
-    content = page_to_dict(page)
+    # apply provided kwargs as changes to the page, if any
     for (key, value) in kwargs.items():
-        try:
-            page[key] = value 
-            content[key] = value
-        except (KeyError, AttributeError):
-            continue
+        setattr(page, key, value)
 
-    # create the revision object
-    revision = PageRevision.create(
-        content_json=json.dumps(content),
+    # serialize current page state as content of a new revision
+    content_json = serialize('json', [page])
+
+    # create the revision object and save it
+    PageRevision = apps.get_model('wagtailcore', 'PageRevision')
+    revision = PageRevision(
+        page_id=page.id,
+        content_json=content_json,
         user=user,
         submitted_for_moderation=False,
         approved_go_live_at=None,
         created_at=created_at
     )
+    revision.save()
 
     # update and save the page
     page.latest_revision_created_at = created_at
     page.draft_title = page.title
     page.has_unpublished_changes = True
+    page.save()
 
     # log the revision and return it
     logger.info("Page edited: \"%s\" id=%d revision_id=%d", page.title,

@@ -1,9 +1,13 @@
+import json
+from datetime import datetime
+
 from django.apps import apps
+from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 from wagtail.core.models import Page, PageRevision
 
-from cdhweb.pages.migration_utils import add_child, get_parent, create_revision
+from cdhweb.pages.migration_utils import add_child, create_revision, get_parent
 from cdhweb.pages.models import ContentPage, HomePage
 
 
@@ -66,14 +70,17 @@ class TestAddChild(TestCase):
         pass
 
 
-def TestCreateRevision(TestCase):
+class TestCreateRevision(TestCase):
     fixtures = ['sample_pages']
 
     def test_create(self):
-        # create an empty revision of the homepage
+        # create some empty revisions of the homepage
         home = Page.objects.get(title='Home')
-        revision = create_revision(apps, home)
+        rev1 = create_revision(apps, home)
         self.assertEqual(home.revisions.count(), 1) # now has 1 revision
+        rev2 = create_revision(apps, home)
+        self.assertEqual(home.revisions.count(), 2) # now 2 revisions
+        self.assertEqual(home.latest_revision_created_at, rev2.created_at)
 
     def test_update_page(self):
         # check that the page associated with the revision is updated
@@ -82,17 +89,33 @@ def TestCreateRevision(TestCase):
         self.assertEqual(home.latest_revision_created_at, revision.created_at)
         self.assertTrue(home.has_unpublished_changes)
 
-    def test_content(self):
-        # check that the provided content is included in the revision
-        home = Page.objects.get(title='Home')
-        revision = create_revision(apps, home, content=[])
-        pass
-
     def test_user(self):
-        pass
+        # check creating a revision associated with an arbitrary user
+        research = Page.objects.get(title='Research')
+        bob = User.objects.create_user('bob', 'bob@example.com', 'password')
+        create_revision(apps, research, user=bob)
+        revision = research.get_latest_revision()
+        self.assertEqual(revision.user, bob)
 
     def test_timestamp(self):
-        pass
+        # check creating a revision with an arbitrary creation date
+        research = Page.objects.get(title='Research')
+        old_date = datetime(1991, 12, 1)
+        revision = create_revision(apps, research, created_at=old_date)
+        self.assertEqual(research.latest_revision_created_at, old_date)
 
     def test_logging(self):
+        # check that the newly created revision is logged
         pass
+
+    def test_content(self):
+        # check that the provided page content is included in the revision
+        # NOTE the actual fields that store page content (in this case 'body')
+        # are usually defined on the model that inherits `Page`, not `Page`!
+        research = Page.objects.get(title='Research')
+        content = []
+        create_revision(apps, research, body=json.dumps(content))
+        revision = research.get_latest_revision_as_page()
+        self.assertEqual(revision.body, content)
+        pass
+

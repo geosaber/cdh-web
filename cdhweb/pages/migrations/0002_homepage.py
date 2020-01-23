@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-from cdhweb.pages.migration_utils import add_child
+from cdhweb.pages.migration_utils import add_child, create_revision
 
 
 def create_homepage(apps, schema_editor):
@@ -25,7 +25,10 @@ def create_homepage(apps, schema_editor):
 
     # create the new homepage underneath site root
     root = Page.objects.get(title='Root')
-    home = add_child(apps, root, HomePage, title='Home', body=content)
+    home = add_child(apps, root, HomePage, title='Home')
+
+    # create a new revision for the page to apply content & mark migration
+    create_revision(apps, home, content=content)
 
     # point the default site at the new homepage
     site = Site.objects.first()
