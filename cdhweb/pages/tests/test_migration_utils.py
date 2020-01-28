@@ -7,8 +7,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 from wagtail.core.models import Page, PageRevision
 
-from cdhweb.pages.migration_utils import add_child, create_revision, get_parent
-from cdhweb.pages.models import ContentPage, HomePage
+from cdhweb.pages.migration_utils import (add_child, create_revision,
+                                          get_parent, html_to_streamfield,
+                                          streamfield_to_html)
+from cdhweb.pages.models import ContentPage, HomePage, LandingPage
 
 
 class TestGetParent(TestCase):
@@ -112,10 +114,12 @@ class TestCreateRevision(TestCase):
         # check that the provided page content is included in the revision
         # NOTE the actual fields that store page content (in this case 'body')
         # are usually defined on the model that inherits `Page`, not `Page`!
-        research = Page.objects.get(title='Research')
-        content = []
-        create_revision(apps, research, body=json.dumps(content))
+        research = LandingPage.objects.get(title='Research')
+        content = """
+        <h2>Here is a heading</h2>
+        <p>Some basic paragraph content</p>
+        <ol><li>list</li><li>items</li></ol>
+        """
+        create_revision(apps, research, body=html_to_streamfield(content))
         revision = research.get_latest_revision_as_page()
-        self.assertEqual(revision.body, content)
-        pass
-
+        self.assertEqual(streamfield_to_html(revision.body), content)

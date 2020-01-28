@@ -13,7 +13,8 @@ logger = logging.getLogger('wagtail.core')
 # http://www.agilosoftware.com/blog/django-treebard-and-wagtail-page-creation/
 def get_parent(apps, page):
     '''Find the parent of a wagtail page instance. Always returns the underlying
-    :class:`wagtail.core.models.Page` rather than a subclass.'''
+    :class:`wagtail.core.models.Page` rather than a subclass.
+    '''
 
     # if the path is 4 digits, we're at the root, so there is no parent
     if len(page.path) == 4:
@@ -29,7 +30,8 @@ def get_parent(apps, page):
 # https://github.com/wagtail/wagtail/blob/stable/2.3.x/wagtail/core/models.py#L442
 def add_child(apps, parent_page, klass, **kwargs):
     '''Create a new draft wagtail page of type klass as a child of page instance
-    parent_page, passing along kwargs to its create() function.'''
+    parent_page, passing along kwargs to its create() function.
+    '''
 
     # add/set the correct content type for the new page
     ContentType = apps.get_model('contenttypes.ContentType')
@@ -68,7 +70,8 @@ def add_child(apps, parent_page, klass, **kwargs):
 # https://github.com/wagtail/wagtail/blob/stable/2.3.x/wagtail/core/models.py#L631
 def create_revision(apps, page, user=None, created_at=datetime.now(), **kwargs):
     '''Add a :class:`wagtail.core.models.PageRevision` to document changes to a
-    Page associated with a particular user and timestamp.'''
+    Page associated with a particular user and timestamp.
+    '''
 
     # apply provided kwargs as changes to the page, if any
     for (key, value) in kwargs.items():
@@ -100,6 +103,25 @@ def create_revision(apps, page, user=None, created_at=datetime.now(), **kwargs):
                 page.id, revision.id)
 
     return revision
+
+# adapted from wagtail docs on migrating to `StreamField`:
+# https://docs.wagtail.io/en/v2.5/topics/streamfield.html#migrating-richtextfields-to-streamfield
+def html_to_streamfield(apps, content):
+    '''Convert an HTML string of rich-text content into the contents of a
+    :class:`wagtail.core.fields.StreamField`.'''
+    BodyContentBlock = apps.get_model('cdhpages', 'BodyContentBlock')
+    return [('rich_text', RichText(content))]
+
+# adapted from wagtail docs on migrating to `StreamField`:
+# https://docs.wagtail.io/en/v2.5/topics/streamfield.html#migrating-richtextfields-to-streamfield
+def streamfield_to_html(field):
+    '''Concatenate the HTML source of all rich text blocks contained in a 
+    :class:`wagtail.core.fields.StreamField` and return as a string.'''
+    if field.raw_text is None:
+        return ''.join([
+            block.value.source for block in field if block.block_type == 'rich_text'
+        ])
+    return field.raw_text
 
 # adapted from `TestMigrations`
 # https://www.caktusgroup.com/blog/2016/02/02/writing-unit-tests-django-migrations/
